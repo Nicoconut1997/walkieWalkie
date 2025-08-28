@@ -1,71 +1,47 @@
 // walkieWalkie - Dog walking events application home screen
-import './App.css'
-import { EventCard } from './components/EventCard'
+import './App.css';
+import { EventsList } from './components/EventsList';
+import { sampleEvents } from './data/sampleEvents';
 
 function App() {
-  return (
-    <div className="walkie-background min-h-screen flex flex-col items-center justify-between px-4 py-8">
-      {/* Logo/Title at top of screen */}
-      <div className="w-full text-center pt-4">
-        <h1 className="walkie-title text-3xl md:text-4xl font-bold tracking-wide">
-          🐕 walkieWalkie
-        </h1>
-          {/* Team  */}
-          <p className="walkie-subtitle text-sm">
-            Created by team Butter
-          </p>
-      </div>
-      
-      {/* Main content in center */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8 px-4">
-        {/* Text content section */}
-        <div className="space-y-6">
-          {/* Main title */}
-          <h3 className="walkie-main-title text-6xl md:text-5xl font-bold leading-tight">
-            Dog Walks?
-          </h3>
-          
-          {/* Subtitle */}
-          <p className="walkie-subtitle text-xl">
-            Lets make it happen!
-          </p>
+	return (
+		<div className='walkie-background min-h-screen flex flex-col items-center justify-between px-4 sm:px-6 lg:px-8 py-6 sm:py-8'>
+			{/* Logo/Title at top of screen */}
+			<div className='w-full text-center pt-2 sm:pt-4'>
+				<h1 className='walkie-title text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide'>
+					🐕 walkieWalkie
+				</h1>
+				{/* Team  */}
+				<p className='walkie-subtitle text-xs sm:text-sm mt-1'>Created by team Butter</p>
+			</div>
 
-        
-        </div>
+			{/* Main content in center */}
+			<div className='flex-1 flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8 px-2 sm:px-4 w-full'>
+				{/* Text content section */}
+				<div className='space-y-4 sm:space-y-6'>
+					{/* Main title */}
+					<h3 className='walkie-main-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight px-4'>
+						Dog Walks?
+					</h3>
 
+					{/* Subtitle */}
+					<p className='walkie-subtitle text-lg sm:text-xl lg:text-2xl px-4'>
+						Lets make it happen!
+					</p>
+				</div>
 
+				{/* Events List Section */}
+				<EventsList events={sampleEvents} />
+			</div>
 
-        {/* Featured Event Section with subtle border */}
-        <div className="walkie-section-border bg-white rounded-2xl border border-gray-200 shadow-sm p-8 max-w-2xl w-full mx-4 space-y-8">
-          {/* Section Subtitle */}
-          <p className="walkie-subtitle text-lg text-center">
-            Join fellow dog lovers in your area for exciting walking adventures. 
-            Discover new routes, make friends, and give your furry companion the exercise they deserve.
-          </p>
-
-          {/* Preview Card - evenly spaced */}
-          <div className="w-full flex justify-center">
-            <EventCard 
-              title="Morning Walk!"
-              location="Freemans Bay, Auckland (2km)"
-              attendeeCount={6}
-              date="Sat 30 August"
-              startTime="9:00 am"
-              endTime="11:00 am"
-              emoji="🌅"
-            />
-          </div>
-        </div>
-      </div>
-      
-      {/* CTA Button at bottom of screen */}
-      <div className="w-full text-center pb-4">
-        <button className="walkie-button inline-flex items-center justify-center font-medium text-white px-8 py-4 text-lg rounded-lg">
-          🦮 View walks near me
-        </button>
-      </div>
-    </div>
-  )
+			{/* CTA Button at bottom of screen */}
+			<div className='w-full text-center pb-2 sm:pb-4 px-4'>
+				<button className='walkie-button inline-flex items-center justify-center font-medium text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-lg w-full sm:w-auto min-h-[48px] touch-manipulation'>
+					🦮 View walks near me
+				</button>
+			</div>
+		</div>
+	);
 }
 
-export default App
+export default App;
