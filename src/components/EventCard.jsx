@@ -18,23 +18,51 @@ export const EventCard = ({
 }) => {
 	// Component state
 	const [isFavorited, setIsFavorited] = useState(false);
+	const [isJoined, setIsJoined] = useState(false);
 	const navigate = useNavigate();
 
 	// Variables / constants
 	const timeRange = `${startTime} - ${endTime}`;
 	const attendeeText = `${attendeeCount} people signed up`;
 
-	// Load favorite status from localStorage
+	// Load favorite and joined status from localStorage
 	useEffect(() => {
-		const savedFavorites = localStorage.getItem('walkieWalkie_favorites');
-		if (savedFavorites) {
-			try {
-				const parsedFavorites = JSON.parse(savedFavorites);
-				setIsFavorited(parsedFavorites.includes(id.toString()));
-			} catch (error) {
-				console.error('Error loading favorites:', error);
+		const loadStatus = () => {
+			// Load favorites
+			const savedFavorites = localStorage.getItem('walkieWalkie_favorites');
+			if (savedFavorites) {
+				try {
+					const parsedFavorites = JSON.parse(savedFavorites);
+					setIsFavorited(parsedFavorites.includes(id.toString()));
+				} catch (error) {
+					console.error('Error loading favorites:', error);
+				}
 			}
-		}
+
+			// Load joined walks
+			const savedJoinedWalks = localStorage.getItem('walkieWalkie_joinedWalks');
+			if (savedJoinedWalks) {
+				try {
+					const parsedJoinedWalks = JSON.parse(savedJoinedWalks);
+					setIsJoined(parsedJoinedWalks.includes(id.toString()));
+				} catch (error) {
+					console.error('Error loading joined walks:', error);
+				}
+			}
+		};
+
+		loadStatus();
+
+		// Listen for updates to joined walks
+		const handleJoinedWalksUpdate = () => {
+			loadStatus();
+		};
+
+		window.addEventListener('joinedWalksUpdated', handleJoinedWalksUpdate);
+
+		return () => {
+			window.removeEventListener('joinedWalksUpdated', handleJoinedWalksUpdate);
+		};
 	}, [id]);
 
 	// Functions
@@ -47,8 +75,30 @@ export const EventCard = ({
 	const handleJoinEvent = e => {
 		e.preventDefault();
 		e.stopPropagation();
-		// This would handle joining an event in the future
-		alert('🎉 Join event functionality coming soon!');
+		
+		try {
+			const savedJoinedWalks = localStorage.getItem('walkieWalkie_joinedWalks');
+			let joinedWalks = savedJoinedWalks ? JSON.parse(savedJoinedWalks) : [];
+			
+			const eventIdString = id.toString();
+			
+			if (isJoined) {
+				// Leave the walk
+				joinedWalks = joinedWalks.filter(walkId => walkId !== eventIdString);
+				setIsJoined(false);
+			} else {
+				// Join the walk
+				joinedWalks.push(eventIdString);
+				setIsJoined(true);
+			}
+			
+			localStorage.setItem('walkieWalkie_joinedWalks', JSON.stringify(joinedWalks));
+			
+			// Dispatch custom event to notify other components
+			window.dispatchEvent(new CustomEvent('joinedWalksUpdated'));
+		} catch (error) {
+			console.error('Error updating joined walks:', error);
+		}
 	};
 
 	const handleFavoriteToggle = e => {
@@ -140,9 +190,13 @@ export const EventCard = ({
 					) : (
 						<button
 							onClick={handleJoinEvent}
-							className='w-full walkie-button inline-flex items-center justify-center font-medium text-white px-4 py-3 text-sm rounded-lg min-h-[44px] touch-manipulation'
+							className={`w-full inline-flex items-center justify-center font-medium px-4 py-3 text-sm rounded-lg min-h-[44px] touch-manipulation transition-all duration-200 ${
+								isJoined
+									? 'bg-green-100 text-green-700 border-2 border-green-300 hover:bg-green-200'
+									: 'walkie-button text-white'
+							}`}
 						>
-							🐕 Join This Walk
+							{isJoined ? '✅ Joined!' : '🐕 Join This Walk'}
 						</button>
 					)}
 				</div>

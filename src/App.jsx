@@ -7,6 +7,7 @@ import { DogWalks } from './pages/DogWalks';
 import { DogProfile } from './pages/DogProfile';
 import { CreateEvent } from './pages/CreateEvent';
 import { FavoriteWalks } from './pages/FavoriteWalks';
+import { MyWalks } from './pages/MyWalks';
 import { EventDetails } from './pages/EventDetails';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/walks' element={<DogWalks />} />
+						<Route path='/my-walks' element={<MyWalks />} />
 						<Route path='/favorites' element={<FavoriteWalks />} />
 						<Route path='/profile' element={<DogProfile />} />
 						<Route path='/create-event' element={<CreateEvent />} />
