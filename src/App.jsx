@@ -6,6 +6,9 @@ import { Home } from './pages/Home';
 import { DogWalks } from './pages/DogWalks';
 import { DogProfile } from './pages/DogProfile';
 import { CreateEvent } from './pages/CreateEvent';
+import { RoutesSuggestion } from './pages/RoutesSuggestion';
+import { PlaceDetail } from './pages/PlaceDetail';
+import { WalkingHistory } from './pages/WalkingHistory';
 import { FavoriteWalks } from './pages/FavoriteWalks';
 import { MyWalks } from './pages/MyWalks';
 import { EventDetails } from './pages/EventDetails';
@@ -24,6 +27,9 @@ function App() {
 						<Route path='/walks' element={<DogWalks />} />
 						<Route path='/my-walks' element={<MyWalks />} />
 						<Route path='/favorites' element={<FavoriteWalks />} />
+						<Route path='/routes' element={<RoutesSuggestion />} />
+						<Route path='/place-detail/:placeId' element={<PlaceDetail />} />
+						<Route path='/walking-history' element={<WalkingHistory />} />
 						<Route path='/profile' element={<DogProfile />} />
 						<Route path='/create-event' element={<CreateEvent />} />
 						<Route path='/event/:id' element={<EventDetails />} />

@@ -2,8 +2,11 @@
 // Shows dog details, owner info, and walking preferences with full editing capabilities
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const DogProfile = () => {
+	const navigate = useNavigate();
+
 	// Default profile data
 	const defaultProfile = {
 		dogName: 'Buddy',
@@ -391,7 +394,10 @@ export const DogProfile = () => {
 							>
 								✏️ Edit Profile
 							</button>
-							<button className='flex-1 inline-flex items-center justify-center font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 text-base rounded-lg transition-colors duration-200 min-h-[48px] touch-manipulation'>
+							<button
+								onClick={() => navigate('/walking-history')}
+								className='flex-1 inline-flex items-center justify-center font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 text-base rounded-lg transition-colors duration-200 min-h-[48px] touch-manipulation'
+							>
 								📋 Walking History
 							</button>
 						</>

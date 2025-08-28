@@ -13,8 +13,8 @@ export const Navigation = () => {
 
 	const navItems = [
 		{ name: 'Dog Walks', path: '/walks' },
+		{ name: 'Routes', path: '/routes' },
 		{ name: 'My Walks', path: '/my-walks' },
-		{ name: 'Favorite Walks', path: '/favorites' },
 		{ name: 'Create Event', path: '/create-event' },
 		{ name: 'Dog Profile', path: '/profile' },
 	];
