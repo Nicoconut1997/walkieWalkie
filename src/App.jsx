@@ -6,6 +6,8 @@ import { Home } from './pages/Home';
 import { DogWalks } from './pages/DogWalks';
 import { DogProfile } from './pages/DogProfile';
 import { CreateEvent } from './pages/CreateEvent';
+import { FavoriteWalks } from './pages/FavoriteWalks';
+import { EventDetails } from './pages/EventDetails';
 
 function App() {
 	return (
@@ -19,8 +21,10 @@ function App() {
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/walks' element={<DogWalks />} />
+						<Route path='/favorites' element={<FavoriteWalks />} />
 						<Route path='/profile' element={<DogProfile />} />
 						<Route path='/create-event' element={<CreateEvent />} />
+						<Route path='/event/:id' element={<EventDetails />} />
 					</Routes>
 				</main>
 			</div>
