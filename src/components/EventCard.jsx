@@ -2,6 +2,7 @@
 // Displays event title, location, attendee count, date and time
 
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 export const EventCard = ({
 	title,
@@ -11,10 +12,22 @@ export const EventCard = ({
 	startTime,
 	endTime,
 	emoji = '🌅',
+	showCreateButton = false,
 }) => {
+	const navigate = useNavigate();
+
 	// Variables / constants
 	const timeRange = `${startTime} - ${endTime}`;
 	const attendeeText = `${attendeeCount} people signed up`;
+
+	const handleCreateEvent = () => {
+		navigate('/create-event');
+	};
+
+	const handleJoinEvent = () => {
+		// This would handle joining an event in the future
+		alert('🎉 Join event functionality coming soon!');
+	};
 
 	// Return
 	return (
@@ -46,6 +59,25 @@ export const EventCard = ({
 						<span className='text-sm sm:text-base walkie-subtitle'>⏰ {timeRange}</span>
 					</div>
 				</div>
+
+				{/* Action Buttons */}
+				<div className='pt-2 space-y-2'>
+					{showCreateButton ? (
+						<button
+							onClick={handleCreateEvent}
+							className='w-full walkie-button inline-flex items-center justify-center font-medium text-white px-4 py-3 text-sm rounded-lg min-h-[44px] touch-manipulation'
+						>
+							✨ Create Similar Event
+						</button>
+					) : (
+						<button
+							onClick={handleJoinEvent}
+							className='w-full walkie-button inline-flex items-center justify-center font-medium text-white px-4 py-3 text-sm rounded-lg min-h-[44px] touch-manipulation'
+						>
+							🐕 Join This Walk
+						</button>
+					)}
+				</div>
 			</div>
 		</div>
 	);
@@ -59,4 +91,5 @@ EventCard.propTypes = {
 	startTime: PropTypes.string.isRequired,
 	endTime: PropTypes.string.isRequired,
 	emoji: PropTypes.string,
+	showCreateButton: PropTypes.bool,
 };
