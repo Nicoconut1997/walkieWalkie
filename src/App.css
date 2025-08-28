@@ -90,3 +90,42 @@
 		border-width: 1px !important;
 	}
 }
+
+/* Navigation Styles - Following existing responsive patterns */
+.walkie-nav {
+	background-color: #ffffff !important;
+	border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.walkie-nav-link {
+	transition: all 0.2s ease-in-out;
+}
+
+.walkie-mobile-menu-btn {
+	transition: all 0.2s ease-in-out;
+}
+
+.walkie-mobile-nav-link {
+	transition: all 0.2s ease-in-out;
+}
+
+/* Primary color styles for navigation */
+.text-primary-500 {
+	color: #ff6b47 !important;
+}
+
+.border-primary-500 {
+	border-color: #ff6b47 !important;
+}
+
+.bg-primary-50 {
+	background-color: #fff8f6 !important;
+}
+
+.bg-primary-500 {
+	background-color: #ff6b47 !important;
+}
+
+.hover\:bg-primary-600:hover {
+	background-color: #f04822 !important;
+}
