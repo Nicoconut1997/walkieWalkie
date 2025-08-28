@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "name": "Claude-Inspired Design System",
+    "version": "1.0.0",
+    "description": "Design system based on Claude's clean, modern aesthetic",
+    "framework": "tailwind"
+  },
+  "colors": {
+    "primary": {
+      "50": "#fff8f6",
+      "100": "#ffede8",
+      "200": "#ffddd4",
+      "300": "#ffc4b5",
+      "400": "#ff9f86",
+      "500": "#ff6b47",
+      "600": "#f04822",
+      "700": "#d63516",
+      "800": "#b42d16",
+      "900": "#942919"
+    },
+    "neutral": {
+      "0": "#ffffff",
+      "50": "#fafafa",
+      "100": "#f5f5f5",
+      "200": "#e5e5e5",
+      "300": "#d4d4d4",
+      "400": "#a3a3a3",
+      "500": "#737373",
+      "600": "#525252",
+      "700": "#404040",
+      "800": "#262626",
+      "900": "#171717",
+      "950": "#0a0a0a"
+    },
+    "semantic": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    },
+    "background": {
+      "primary": "#fafafa",
+      "secondary": "#ffffff",
+      "tertiary": "#f5f5f5",
+      "overlay": "rgba(0, 0, 0, 0.5)"
+    },
+    "text": {
+      "primary": "#171717",
+      "secondary": "#525252",
+      "tertiary": "#737373",
+      "inverse": "#ffffff",
+      "muted": "#a3a3a3"
+    },
+    "border": {
+      "default": "#e5e5e5",
+      "muted": "#f5f5f5",
+      "emphasis": "#d4d4d4"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+      "mono": ["SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
+      "6xl": "3.75rem",
+      "7xl": "4.5rem"
+    },
+    "fontWeight": {
+      "light": "300",
+      "normal": "400",
+      "medium": "500",
+      "semibold": "600",
+      "bold": "700",
+      "extrabold": "800"
+    },
+    "lineHeight": {
+      "tight": "1.25",
+      "snug": "1.375",
+      "normal": "1.5",
+      "relaxed": "1.625",
+      "loose": "2"
+    },
+    "letterSpacing": {
+      "tighter": "-0.05em",
+      "tight": "-0.025em",
+      "normal": "0em",
+      "wide": "0.025em",
+      "wider": "0.05em",
+      "widest": "0.1em"
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "5": "1.25rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "10": "2.5rem",
+    "12": "3rem",
+    "16": "4rem",
+    "20": "5rem",
+    "24": "6rem",
+    "32": "8rem",
+    "40": "10rem",
+    "48": "12rem",
+    "56": "14rem",
+    "64": "16rem"
+  },
+  "borderRadius": {
+    "none": "0",
+    "sm": "0.125rem",
+    "base": "0.25rem",
+    "md": "0.375rem",
+    "lg": "0.5rem",
+    "xl": "0.75rem",
+    "2xl": "1rem",
+    "3xl": "1.5rem",
+    "full": "9999px"
+  },
+  "boxShadow": {
+    "none": "none",
+    "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+    "base": "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+    "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+    "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+    "inner": "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)"
+  },
+  "breakpoints": {
+    "xs": "475px",
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+  "components": {
+    "button": {
+      "base": "inline-flex items-center justify-center font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+      "variants": {
+        "primary": {
+          "solid": "bg-primary-500 hover:bg-primary-600 text-white border border-primary-500 hover:border-primary-600",
+          "outline": "border border-primary-500 text-primary-500 hover:bg-primary-50",
+          "ghost": "text-primary-500 hover:bg-primary-50"
+        },
+        "secondary": {
+          "solid": "bg-neutral-800 hover:bg-neutral-900 text-white border border-neutral-800 hover:border-neutral-900",
+          "outline": "border border-neutral-300 text-neutral-700 hover:bg-neutral-50",
+          "ghost": "text-neutral-700 hover:bg-neutral-50"
+        },
+        "google": {
+          "solid": "bg-white hover:bg-neutral-50 text-neutral-700 border border-neutral-300 shadow-sm"
+        }
+      },
+      "sizes": {
+        "sm": "px-3 py-2 text-sm rounded-md",
+        "md": "px-4 py-2 text-base rounded-lg",
+        "lg": "px-6 py-3 text-lg rounded-lg",
+        "xl": "px-8 py-4 text-xl rounded-xl"
+      }
+    },
+    "input": {
+      "base": "w-full px-3 py-2 border rounded-lg bg-white text-neutral-900 placeholder-neutral-400 transition-colors duration-200",
+      "states": {
+        "default": "border-neutral-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-100",
+        "error": "border-semantic-error focus:border-semantic-error focus:ring-2 focus:ring-red-100",
+        "disabled": "bg-neutral-50 border-neutral-200 cursor-not-allowed"
+      },
+      "sizes": {
+        "sm": "px-2 py-1 text-sm",
+        "md": "px-3 py-2 text-base",
+        "lg": "px-4 py-3 text-lg"
+      }
+    },
+    "card": {
+      "base": "bg-white rounded-xl border border-neutral-200 shadow-sm",
+      "variants": {
+        "default": "p-6",
+        "compact": "p-4",
+        "spacious": "p-8",
+        "hero": "p-8 md:p-12 text-center"
+      }
+    },
+    "container": {
+      "base": "mx-auto px-4 sm:px-6 lg:px-8",
+      "maxWidth": {
+        "sm": "max-w-sm",
+        "md": "max-w-md",
+        "lg": "max-w-lg",
+        "xl": "max-w-xl",
+        "2xl": "max-w-2xl",
+        "4xl": "max-w-4xl",
+        "6xl": "max-w-6xl",
+        "7xl": "max-w-7xl"
+      }
+    },
+    "navigation": {
+      "base": "bg-white border-b border-neutral-200",
+      "link": "text-neutral-700 hover:text-primary-500 font-medium transition-colors duration-200"
+    },
+    "pricing": {
+      "card": "bg-white rounded-2xl border border-neutral-200 p-8 relative",
+      "popular": "border-primary-500 ring-2 ring-primary-100",
+      "badge": "absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium"
+    }
+  },
+  "layouts": {
+    "hero": {
+      "container": "min-h-screen flex items-center justify-center px-4",
+      "content": "max-w-md w-full space-y-8",
+      "title": "text-4xl md:text-5xl font-bold text-center text-neutral-900 leading-tight",
+      "subtitle": "text-lg text-neutral-600 text-center mt-4",
+      "form": "space-y-4 mt-8"
+    },
+    "section": {
+      "container": "py-16 md:py-24",
+      "header": "text-center mb-12",
+      "title": "text-3xl md:text-4xl font-bold text-neutral-900",
+      "description": "text-lg text-neutral-600 mt-4 max-w-2xl mx-auto"
+    },
+    "grid": {
+      "cols1": "grid grid-cols-1 gap-6",
+      "cols2": "grid grid-cols-1 md:grid-cols-2 gap-6",
+      "cols3": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+      "cols4": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+    }
+  },
+  "animations": {
+    "transition": {
+      "default": "transition-all duration-200 ease-in-out",
+      "fast": "transition-all duration-150 ease-in-out",
+      "slow": "transition-all duration-300 ease-in-out"
+    },
+    "hover": {
+      "scale": "hover:scale-105 transition-transform duration-200",
+      "lift": "hover:-translate-y-1 hover:shadow-lg transition-all duration-200",
+      "glow": "hover:shadow-lg hover:shadow-primary-500/25 transition-all duration-200"
+    }
+  },
+  "icons": {
+    "sizes": {
+      "xs": "w-3 h-3",
+      "sm": "w-4 h-4",
+      "md": "w-5 h-5",
+      "lg": "w-6 h-6",
+      "xl": "w-8 h-8"
+    }
+  },
+  "utilities": {
+    "focus": "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+    "disabled": "disabled:opacity-50 disabled:cursor-not-allowed",
+    "loading": "animate-pulse",
+    "gradient": {
+      "primary": "bg-gradient-to-r from-primary-500 to-primary-600",
+      "subtle": "bg-gradient-to-b from-white to-neutral-50"
+    }
+  }
+}
