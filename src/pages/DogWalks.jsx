@@ -1,7 +1,7 @@
 // DogWalks - Page for browsing dog walking events with comprehensive filtering
 // Shows list of available walks with advanced search and filter capabilities
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { EventsList } from '../components/EventsList';
 import { EventsSearchAndFilter } from '../components/EventsSearchAndFilter';
 import { sampleEvents } from '../data/sampleEvents';
@@ -36,15 +36,18 @@ export const DogWalks = () => {
 		}
 	}, []);
 
-	// Combine sample events with user-created events
-	const allEvents = [...sampleEvents, ...userEvents];
+	// Combine sample events with user-created events (memoized to prevent recreating on every render)
+	const allEvents = useMemo(() => [...sampleEvents, ...userEvents], [userEvents]);
 
-	// Initialize filtered events when allEvents changes
+	// Create stable callback for filtered events
+	const handleFilteredEventsChange = useCallback(newFilteredEvents => {
+		setFilteredEvents(newFilteredEvents);
+	}, []);
+
+	// Initialize filtered events on mount
 	useEffect(() => {
-		if (filteredEvents.length === 0 && allEvents.length > 0) {
-			setFilteredEvents(allEvents);
-		}
-	}, [allEvents, filteredEvents.length]);
+		setFilteredEvents(allEvents);
+	}, [allEvents]);
 
 	return (
 		<div className='walkie-background min-h-screen'>
@@ -65,7 +68,7 @@ export const DogWalks = () => {
 						events={allEvents}
 						dogProfile={dogProfile}
 						userEventCount={userEvents.length}
-						onFilteredEventsChange={setFilteredEvents}
+						onFilteredEventsChange={handleFilteredEventsChange}
 					/>
 				</div>
 

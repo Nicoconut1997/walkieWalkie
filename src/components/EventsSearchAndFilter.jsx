@@ -1,7 +1,7 @@
 // EventsSearchAndFilter - Combined search and filtering component with all logic
 // Handles search UI, filters UI, and all filtering logic for dog walking events
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
 	ENERGY_LEVELS,
@@ -14,6 +14,69 @@ import {
 	DEFAULT_FILTERS,
 } from '../data/constants';
 
+// Helper functions moved outside component to prevent recreation
+const getTimeOfDay = startTime => {
+	const hour = parseInt(startTime.split(':')[0]);
+	const isPM = startTime.includes('pm');
+	const hour24 = isPM && hour !== 12 ? hour + 12 : !isPM && hour === 12 ? 0 : hour;
+
+	if (hour24 >= 6 && hour24 < 12) return 'morning';
+	if (hour24 >= 12 && hour24 < 17) return 'afternoon';
+	return 'evening';
+};
+
+const getActivityType = event => {
+	const title = event.title.toLowerCase();
+	const emoji = event.emoji;
+
+	if (title.includes('training') || title.includes('puppy') || emoji === '🐶') return 'training';
+	if (title.includes('social') || title.includes('playdate') || emoji === '🎉') return 'playgroup';
+	if (title.includes('hike') || title.includes('adventure') || emoji === '⛰️') return 'active';
+	return 'casual';
+};
+
+const getDogSizeCompatibility = event => {
+	const title = event.title.toLowerCase();
+	const attendeeCount = event.attendeeCount;
+
+	if (title.includes('puppy') || title.includes('small')) return 'small';
+	if (title.includes('large') || attendeeCount > 15) return 'large';
+	if (title.includes('hike') || title.includes('adventure')) return 'large';
+	return 'medium'; // Default to medium for most events
+};
+
+const getDistance = location => {
+	const match = location.match(/\((\d+)km\)/);
+	return match ? parseInt(match[1]) : 3; // Default 3km if not specified
+};
+
+const matchesProfile = (event, dogProfile) => {
+	if (!dogProfile) return true;
+
+	const activityType = getActivityType(event);
+	const timeOfDay = getTimeOfDay(event.startTime);
+	const dogSize = getDogSizeCompatibility(event);
+
+	// Check walking preferences
+	if (dogProfile.walkingPreferences) {
+		const preferences = dogProfile.walkingPreferences.map(p => p.toLowerCase());
+		if (preferences.includes('morning walks') && timeOfDay !== 'morning') return false;
+		if (preferences.includes('social groups') && activityType !== 'playgroup') return false;
+		if (preferences.includes('beach areas') && !event.location.toLowerCase().includes('beach'))
+			return false;
+	}
+
+	// Check energy level compatibility
+	if (dogProfile.energy === 'High' && activityType === 'casual') return false;
+	if (dogProfile.energy === 'Low' && activityType === 'active') return false;
+
+	// Check size compatibility
+	if (dogProfile.size === 'Small' && dogSize === 'large') return false;
+	if (dogProfile.size === 'Large' && dogSize === 'small') return false;
+
+	return true;
+};
+
 export const EventsSearchAndFilter = ({
 	events,
 	dogProfile,
@@ -24,76 +87,8 @@ export const EventsSearchAndFilter = ({
 	const [searchTerm, setSearchTerm] = useState('');
 	const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-	// Helper function to determine time of day
-	const getTimeOfDay = startTime => {
-		const hour = parseInt(startTime.split(':')[0]);
-		const isPM = startTime.includes('pm');
-		const hour24 = isPM && hour !== 12 ? hour + 12 : !isPM && hour === 12 ? 0 : hour;
-
-		if (hour24 >= 6 && hour24 < 12) return 'morning';
-		if (hour24 >= 12 && hour24 < 17) return 'afternoon';
-		return 'evening';
-	};
-
-	// Helper function to determine activity type from event details
-	const getActivityType = event => {
-		const title = event.title.toLowerCase();
-		const emoji = event.emoji;
-
-		if (title.includes('training') || title.includes('puppy') || emoji === '🐶') return 'training';
-		if (title.includes('social') || title.includes('playdate') || emoji === '🎉')
-			return 'playgroup';
-		if (title.includes('hike') || title.includes('adventure') || emoji === '⛰️') return 'active';
-		return 'casual';
-	};
-
-	// Helper function to determine dog size compatibility
-	const getDogSizeCompatibility = event => {
-		const title = event.title.toLowerCase();
-		const attendeeCount = event.attendeeCount;
-
-		if (title.includes('puppy') || title.includes('small')) return 'small';
-		if (title.includes('large') || attendeeCount > 15) return 'large';
-		if (title.includes('hike') || title.includes('adventure')) return 'large';
-		return 'medium'; // Default to medium for most events
-	};
-
-	// Helper function to extract distance
-	const getDistance = location => {
-		const match = location.match(/\((\d+)km\)/);
-		return match ? parseInt(match[1]) : 3; // Default 3km if not specified
-	};
-
-	// Check if event matches dog profile preferences
-	const matchesProfile = event => {
-		if (!dogProfile) return true;
-
-		const activityType = getActivityType(event);
-		const timeOfDay = getTimeOfDay(event.startTime);
-		const dogSize = getDogSizeCompatibility(event);
-
-		// Check walking preferences
-		if (dogProfile.walkingPreferences) {
-			const preferences = dogProfile.walkingPreferences.map(p => p.toLowerCase());
-			if (preferences.includes('morning walks') && timeOfDay !== 'morning') return false;
-			if (preferences.includes('social groups') && activityType !== 'playgroup') return false;
-			if (preferences.includes('beach areas') && !event.location.toLowerCase().includes('beach'))
-				return false;
-		}
-
-		// Check energy level compatibility
-		if (dogProfile.energy === 'High' && activityType === 'casual') return false;
-		if (dogProfile.energy === 'Low' && activityType === 'active') return false;
-
-		// Check size compatibility
-		if (dogProfile.size === 'Small' && dogSize === 'large') return false;
-		if (dogProfile.size === 'Large' && dogSize === 'small') return false;
-
-		return true;
-	};
-
 	// Apply all filters to events
-	const applyFilters = () => {
+	const applyFilters = useCallback(() => {
 		const filteredEvents = events.filter(event => {
 			// Search term filter
 			const matchesSearch =
@@ -103,7 +98,7 @@ export const EventsSearchAndFilter = ({
 			if (!matchesSearch) return false;
 
 			// Smart match filter
-			if (filters.smartMatch && !matchesProfile(event)) return false;
+			if (filters.smartMatch && !matchesProfile(event, dogProfile)) return false;
 
 			// Time of day filter
 			if (filters.timeOfDay !== 'all') {
@@ -214,13 +209,13 @@ export const EventsSearchAndFilter = ({
 		});
 
 		return filteredEvents;
-	};
+	}, [events, searchTerm, filters, dogProfile]);
 
 	// Update filtered events whenever search term, filters, or events change
 	useEffect(() => {
 		const filteredEvents = applyFilters();
 		onFilteredEventsChange(filteredEvents);
-	}, [searchTerm, filters, events, onFilteredEventsChange]);
+	}, [applyFilters]);
 
 	// Update individual filter
 	const updateFilter = (filterType, value) => {
