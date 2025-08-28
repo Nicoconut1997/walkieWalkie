@@ -1,6 +1,7 @@
 // EventCard - Reusable component for displaying dog walking events
-// Displays event title, location, attendee count, date and time
+// Displays event title, location, attendee count, date and time with favorite functionality
 
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -15,12 +16,28 @@ export const EventCard = ({
 	emoji = '🌅',
 	showCreateButton = false,
 }) => {
+	// Component state
+	const [isFavorited, setIsFavorited] = useState(false);
 	const navigate = useNavigate();
 
 	// Variables / constants
 	const timeRange = `${startTime} - ${endTime}`;
 	const attendeeText = `${attendeeCount} people signed up`;
 
+	// Load favorite status from localStorage
+	useEffect(() => {
+		const savedFavorites = localStorage.getItem('walkieWalkie_favorites');
+		if (savedFavorites) {
+			try {
+				const parsedFavorites = JSON.parse(savedFavorites);
+				setIsFavorited(parsedFavorites.includes(id.toString()));
+			} catch (error) {
+				console.error('Error loading favorites:', error);
+			}
+		}
+	}, [id]);
+
+	// Functions
 	const handleCreateEvent = e => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -34,17 +51,60 @@ export const EventCard = ({
 		alert('🎉 Join event functionality coming soon!');
 	};
 
+	const handleFavoriteToggle = e => {
+		e.preventDefault();
+		e.stopPropagation();
+		
+		try {
+			const savedFavorites = localStorage.getItem('walkieWalkie_favorites');
+			let favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+			
+			const eventIdString = id.toString();
+			
+			if (isFavorited) {
+				// Remove from favorites
+				favorites = favorites.filter(favId => favId !== eventIdString);
+				setIsFavorited(false);
+			} else {
+				// Add to favorites
+				favorites.push(eventIdString);
+				setIsFavorited(true);
+			}
+			
+			localStorage.setItem('walkieWalkie_favorites', JSON.stringify(favorites));
+			
+			// Dispatch custom event to notify other components
+			window.dispatchEvent(new CustomEvent('favoritesUpdated'));
+		} catch (error) {
+			console.error('Error updating favorites:', error);
+		}
+	};
+
 	// Return clickable card
 	return (
-		<Link
-			to={`/event/${id}`}
-			className='block walkie-card bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5 lg:p-6 max-w-sm w-full hover:transform hover:scale-105 transition-all duration-200 cursor-pointer no-underline'
-		>
-			<div className='space-y-3 sm:space-y-4'>
-				{/* Event Title */}
-				<h3 className='walkie-main-title text-lg sm:text-xl lg:text-2xl font-bold text-left leading-tight'>
-					{emoji} {title}
-				</h3>
+		<div className='relative walkie-card bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5 lg:p-6 max-w-sm w-full hover:transform hover:scale-105 transition-all duration-200'>
+			{/* Favorite Heart Button */}
+			<button
+				onClick={handleFavoriteToggle}
+				className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-200 touch-manipulation ${
+					isFavorited 
+						? 'text-red-500 bg-red-50 hover:bg-red-100' 
+						: 'text-gray-400 bg-gray-50 hover:bg-gray-100 hover:text-red-500'
+				}`}
+				aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+			>
+				{isFavorited ? '❤️' : '🤍'}
+			</button>
+
+			<Link
+				to={`/event/${id}`}
+				className='block no-underline'
+			>
+				<div className='space-y-3 sm:space-y-4'>
+					{/* Event Title */}
+					<h3 className='walkie-main-title text-lg sm:text-xl lg:text-2xl font-bold text-left leading-tight pr-12'>
+						{emoji} {title}
+					</h3>
 
 				{/* Location */}
 				<div className='flex items-start text-left'>
@@ -87,14 +147,15 @@ export const EventCard = ({
 					)}
 				</div>
 
-				{/* View Details Indicator */}
-				<div className='pt-2 border-t border-gray-100'>
-					<span className='text-xs sm:text-sm text-primary-500 font-medium'>
-						Click card for full details →
-					</span>
+					{/* View Details Indicator */}
+					<div className='pt-2 border-t border-gray-100'>
+						<span className='text-xs sm:text-sm text-primary-500 font-medium'>
+							Click card for full details →
+						</span>
+					</div>
 				</div>
-			</div>
-		</Link>
+			</Link>
+		</div>
 	);
 };
 
