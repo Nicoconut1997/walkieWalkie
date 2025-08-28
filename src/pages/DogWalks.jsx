@@ -1,15 +1,19 @@
-// DogWalks - Page for browsing dog walking events with responsive design
-// Shows list of available walks with filters and user-created events
+// DogWalks - Page for browsing dog walking events with comprehensive filtering
+// Shows list of available walks with advanced search and filter capabilities
 
 import { useState, useEffect } from 'react';
 import { EventsList } from '../components/EventsList';
+import { EventsSearchAndFilter } from '../components/EventsSearchAndFilter';
 import { sampleEvents } from '../data/sampleEvents';
 
 export const DogWalks = () => {
 	const [userEvents, setUserEvents] = useState([]);
+	const [dogProfile, setDogProfile] = useState(null);
+	const [filteredEvents, setFilteredEvents] = useState([]);
 
-	// Load user-created events from localStorage
+	// Load user-created events and dog profile from localStorage
 	useEffect(() => {
+		// Load user events
 		const savedEvents = localStorage.getItem('walkieWalkie_events');
 		if (savedEvents) {
 			try {
@@ -19,52 +23,60 @@ export const DogWalks = () => {
 				console.error('Error loading user events:', error);
 			}
 		}
+
+		// Load dog profile for smart matching
+		const savedProfile = localStorage.getItem('walkieWalkie_dogProfile');
+		if (savedProfile) {
+			try {
+				const parsedProfile = JSON.parse(savedProfile);
+				setDogProfile(parsedProfile);
+			} catch (error) {
+				console.error('Error loading dog profile:', error);
+			}
+		}
 	}, []);
 
 	// Combine sample events with user-created events
 	const allEvents = [...sampleEvents, ...userEvents];
 
-	// Return
+	// Initialize filtered events when allEvents changes
+	useEffect(() => {
+		if (filteredEvents.length === 0 && allEvents.length > 0) {
+			setFilteredEvents(allEvents);
+		}
+	}, [allEvents, filteredEvents.length]);
+
 	return (
 		<div className='walkie-background min-h-screen'>
-			<div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'>
+			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'>
 				{/* Page Header */}
-				<div className='text-center mb-8 sm:mb-12'>
-					<h1 className='walkie-main-title text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4'>
-						🐕 Dog Walks Near You
+				<div className='text-center mb-8 sm:mb-10'>
+					<h1 className='walkie-main-title text-3xl sm:text-4xl md:text-5xl font-bold mb-4'>
+						🐕 Dog Walking Events
 					</h1>
-					<p className='walkie-subtitle text-base sm:text-lg max-w-2xl mx-auto px-4'>
-						Discover exciting walking adventures for you and your furry friend. Join local dog
-						owners and explore new routes together!
+					<p className='walkie-subtitle text-base sm:text-lg lg:text-xl max-w-3xl mx-auto px-4'>
+						Discover amazing walking adventures with fellow dog lovers in your area
 					</p>
 				</div>
 
-				{/* Filter Section */}
-				<div className='mb-6 sm:mb-8'>
-					<div className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6'>
-						<div className='flex flex-wrap gap-3 sm:gap-4 items-center justify-center'>
-							<button className='px-3 sm:px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200 text-sm sm:text-base min-h-[44px] touch-manipulation'>
-								📍 Near Me
-							</button>
-							<button className='px-3 sm:px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-sm sm:text-base min-h-[44px] touch-manipulation'>
-								📅 This Week
-							</button>
-							<button className='px-3 sm:px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-sm sm:text-base min-h-[44px] touch-manipulation'>
-								👥 Small Groups
-							</button>
-						</div>
-					</div>
+				{/* Search and Filters */}
+				<div className='mb-8 sm:mb-10'>
+					<EventsSearchAndFilter
+						events={allEvents}
+						dogProfile={dogProfile}
+						userEventCount={userEvents.length}
+						onFilteredEventsChange={setFilteredEvents}
+					/>
 				</div>
 
-				{/* Events Grid */}
-				<EventsList events={allEvents} />
-
-				{/* Load More */}
-				<div className='text-center mt-8 sm:mt-12'>
-					<button className='walkie-button inline-flex items-center justify-center font-medium text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-lg w-full sm:w-auto min-h-[48px] touch-manipulation'>
-						🔍 Load More Walks
-					</button>
-				</div>
+				{/* Events List */}
+				<EventsList
+					events={filteredEvents}
+					title={filteredEvents.length > 0 ? undefined : 'No events found'}
+					subtitle={
+						filteredEvents.length > 0 ? undefined : 'Try adjusting your search or filter criteria'
+					}
+				/>
 			</div>
 		</div>
 	);
