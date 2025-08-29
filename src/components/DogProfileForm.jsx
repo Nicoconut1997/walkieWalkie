@@ -4,6 +4,8 @@
 import PropTypes from 'prop-types';
 import { ENERGY_LEVELS, FRIENDLINESS_LEVELS, DOG_SIZE_OPTIONS } from '../data/constants';
 import { WalkingPreferencesEditor } from './WalkingPreferencesEditor';
+import { ExperienceBar } from './ExperienceBar';
+import { XPSimulator } from './XPSimulator';
 import { DogPhotoUpload } from './DogPhotoUpload';
 
 export const DogProfileForm = ({
@@ -13,6 +15,8 @@ export const DogProfileForm = ({
 	onInputChange,
 	onAddPreference,
 	onRemovePreference,
+	onXPGained,
+	onResetXP,
 	onPhotoUpload,
 	onPhotoRemove,
 }) => {
@@ -43,6 +47,11 @@ export const DogProfileForm = ({
 				onPhotoUpload={onPhotoUpload}
 				onPhotoRemove={onPhotoRemove}
 			/>
+
+			{/* Experience Bar - Solo Leveling Style! */}
+			<div className='mb-6'>
+				<ExperienceBar totalXP={dog.totalXP || 0} showDetails={true} />
+			</div>
 
 			{/* Dog Information */}
 			<div className='space-y-6'>
@@ -214,6 +223,9 @@ export const DogProfileForm = ({
 					onAddPreference={handleWalkingPreferenceAdd}
 					onRemovePreference={handleWalkingPreferenceRemove}
 				/>
+
+				{/* XP Simulator - Development Tool */}
+				{onXPGained && <XPSimulator dog={dog} onXPGained={onXPGained} onResetXP={onResetXP} />}
 			</div>
 		</div>
 	);
@@ -226,6 +238,8 @@ DogProfileForm.propTypes = {
 	onInputChange: PropTypes.func.isRequired,
 	onAddPreference: PropTypes.func.isRequired,
 	onRemovePreference: PropTypes.func.isRequired,
+	onXPGained: PropTypes.func,
+	onResetXP: PropTypes.func,
 	onPhotoUpload: PropTypes.func,
 	onPhotoRemove: PropTypes.func,
 };
