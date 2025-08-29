@@ -4,6 +4,8 @@
 import PropTypes from 'prop-types';
 import { ENERGY_LEVELS, FRIENDLINESS_LEVELS, DOG_SIZE_OPTIONS } from '../data/constants';
 import { WalkingPreferencesEditor } from './WalkingPreferencesEditor';
+import { ExperienceBar } from './ExperienceBar';
+import { XPSimulator } from './XPSimulator';
 
 export const DogProfileForm = ({
 	dog,
@@ -12,6 +14,8 @@ export const DogProfileForm = ({
 	onInputChange,
 	onAddPreference,
 	onRemovePreference,
+	onXPGained,
+	onResetXP,
 }) => {
 	const hasFieldError = fieldName => {
 		const errorKey = `${dog.id}_${fieldName}`;
@@ -41,6 +45,11 @@ export const DogProfileForm = ({
 				<button className='text-primary-500 hover:text-primary-600 font-medium transition-colors duration-200 text-sm sm:text-base min-h-[44px] touch-manipulation'>
 					📸 Add Photo
 				</button>
+			</div>
+
+			{/* Experience Bar - Solo Leveling Style! */}
+			<div className='mb-6'>
+				<ExperienceBar totalXP={dog.totalXP || 0} showDetails={true} />
 			</div>
 
 			{/* Dog Information */}
@@ -213,6 +222,9 @@ export const DogProfileForm = ({
 					onAddPreference={handleWalkingPreferenceAdd}
 					onRemovePreference={handleWalkingPreferenceRemove}
 				/>
+
+				{/* XP Simulator - Development Tool */}
+				{onXPGained && <XPSimulator dog={dog} onXPGained={onXPGained} onResetXP={onResetXP} />}
 			</div>
 		</div>
 	);
@@ -225,4 +237,6 @@ DogProfileForm.propTypes = {
 	onInputChange: PropTypes.func.isRequired,
 	onAddPreference: PropTypes.func.isRequired,
 	onRemovePreference: PropTypes.func.isRequired,
+	onXPGained: PropTypes.func,
+	onResetXP: PropTypes.func,
 };

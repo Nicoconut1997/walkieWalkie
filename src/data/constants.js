@@ -100,3 +100,99 @@ export const DEFAULT_FILTERS = {
 	walkingPreferences: [],
 	smartMatch: false,
 };
+
+// Experience System Constants (Solo Leveling inspired!)
+export const EXPERIENCE_SYSTEM = {
+	// Base XP per minute of walking
+	BASE_XP_PER_MINUTE: 10,
+
+	// Difficulty multipliers based on activity type
+	DIFFICULTY_MULTIPLIERS: {
+		casual: 1.0, // Easy walks
+		training: 1.5, // Training sessions
+		playgroup: 1.2, // Social activities
+		active: 2.0, // Hard hikes/adventures
+	},
+
+	// Distance bonus XP (per km)
+	DISTANCE_BONUS_XP: 5,
+
+	// Level progression formula: 200, 300, 400, 500... XP per level
+	LEVEL_PROGRESSION: {
+		FIRST_LEVEL_XP: 200, // XP needed for level 1->2
+		INCREMENT: 100, // Each level requires 100 more XP than the previous
+		MAX_LEVEL: 50, // Level cap
+	},
+
+	// Special achievement bonuses
+	ACHIEVEMENT_BONUSES: {
+		FIRST_WALK: 50,
+		PERFECT_WEEK: 100, // 7 days in a row
+		LONG_DISTANCE: 25, // Walks over 5km
+		EARLY_BIRD: 15, // Morning walks before 7AM
+		SOCIAL_BUTTERFLY: 20, // Playgroup activities
+	},
+
+	// Level thresholds for visual effects
+	MILESTONE_LEVELS: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+};
+
+// XP calculation utility functions
+export const calculateXPForWalk = (
+	durationMinutes,
+	distanceKm,
+	activityType = 'casual',
+	bonuses = []
+) => {
+	const baseXP = durationMinutes * EXPERIENCE_SYSTEM.BASE_XP_PER_MINUTE;
+	const difficultyMultiplier = EXPERIENCE_SYSTEM.DIFFICULTY_MULTIPLIERS[activityType] || 1.0;
+	const distanceBonus = distanceKm * EXPERIENCE_SYSTEM.DISTANCE_BONUS_XP;
+
+	let totalXP = baseXP * difficultyMultiplier + distanceBonus;
+
+	// Add achievement bonuses
+	bonuses.forEach(bonus => {
+		totalXP += EXPERIENCE_SYSTEM.ACHIEVEMENT_BONUSES[bonus] || 0;
+	});
+
+	return Math.round(totalXP);
+};
+
+export const calculateLevelFromXP = totalXP => {
+	const { MAX_LEVEL } = EXPERIENCE_SYSTEM.LEVEL_PROGRESSION;
+
+	// New system XP thresholds:
+	// Level 1: 0-199 XP (need 200 for Level 2)
+	// Level 2: 200-499 XP (need 500 total for Level 3)
+	// Level 3: 500-899 XP (need 900 total for Level 4)
+	// Level N total XP: 50 * (N-1) * (N+2)
+
+	if (totalXP < 200) return 1;
+	if (totalXP < 500) return 2;
+	if (totalXP < 900) return 3;
+	if (totalXP < 1400) return 4;
+
+	// For higher levels, use the formula
+	for (let level = 5; level <= MAX_LEVEL; level++) {
+		const xpForThisLevel = 50 * (level - 1) * (level + 2);
+		if (totalXP < xpForThisLevel) {
+			return level - 1;
+		}
+	}
+
+	return MAX_LEVEL;
+};
+
+export const calculateXPForNextLevel = currentLevel => {
+	const { FIRST_LEVEL_XP, INCREMENT } = EXPERIENCE_SYSTEM.LEVEL_PROGRESSION;
+	// Total XP needed to reach level (currentLevel + 1)
+	const nextLevel = currentLevel + 1;
+	return 50 * (nextLevel - 1) * (nextLevel + 2);
+};
+
+export const calculateXPForCurrentLevel = currentLevel => {
+	if (currentLevel <= 1) return 0;
+	const { FIRST_LEVEL_XP, INCREMENT } = EXPERIENCE_SYSTEM.LEVEL_PROGRESSION;
+	// Total XP needed to reach current level
+	return 50 * (currentLevel - 1) * (currentLevel + 2);
+};

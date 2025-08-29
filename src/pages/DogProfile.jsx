@@ -7,6 +7,7 @@ import { OwnerInfoForm } from '../components/OwnerInfoForm';
 import { DogTabsNav } from '../components/DogTabsNav';
 import { DogProfileForm } from '../components/DogProfileForm';
 import { ProfileActions } from '../components/ProfileActions';
+import { calculateLevelFromXP } from '../data/constants';
 
 export const DogProfile = () => {
 	const navigate = useNavigate();
@@ -21,6 +22,12 @@ export const DogProfile = () => {
 		energy: '',
 		friendliness: '',
 		walkingPreferences: [],
+		// Experience system
+		totalXP: 0,
+		level: 1,
+		walksCompleted: 0,
+		achievements: [],
+		lastXPGain: 0,
 	});
 
 	// Default profile with owner info and multiple dogs
@@ -36,6 +43,11 @@ export const DogProfile = () => {
 				energy: 'High',
 				friendliness: 'Very Friendly',
 				walkingPreferences: ['Morning walks', 'Beach areas', 'Social groups'],
+				// Experience system - give Buddy some starting XP for demo
+				totalXP: 150,
+				level: 1,
+				walksCompleted: 8,
+				achievements: ['FIRST_WALK', 'EARLY_BIRD'],
 			},
 		],
 	};
@@ -66,6 +78,11 @@ export const DogProfile = () => {
 								energy: parsedProfile.energy,
 								friendliness: parsedProfile.friendliness,
 								walkingPreferences: parsedProfile.walkingPreferences || [],
+								// Add XP system fields for migrated dogs
+								totalXP: parsedProfile.totalXP || 0,
+								level: parsedProfile.level || 1,
+								walksCompleted: parsedProfile.walksCompleted || 0,
+								achievements: parsedProfile.achievements || [],
 							},
 						],
 					};
@@ -73,9 +90,26 @@ export const DogProfile = () => {
 					// Save migrated format
 					localStorage.setItem('walkieWalkie_dogProfile', JSON.stringify(migratedProfile));
 				} else {
-					setProfile(parsedProfile);
-					if (parsedProfile.dogs?.length > 0) {
-						setSelectedDogId(parsedProfile.dogs[0].id);
+					// Migrate existing dogs to include XP fields if missing
+					const migratedProfile = {
+						...parsedProfile,
+						dogs:
+							parsedProfile.dogs?.map(dog => ({
+								...dog,
+								totalXP: dog.totalXP || 0,
+								level: dog.level || 1,
+								walksCompleted: dog.walksCompleted || 0,
+								achievements: dog.achievements || [],
+								lastXPGain: dog.lastXPGain || 0,
+							})) || [],
+					};
+					setProfile(migratedProfile);
+					if (migratedProfile.dogs?.length > 0) {
+						setSelectedDogId(migratedProfile.dogs[0].id);
+					}
+					// Save migrated format if changes were made
+					if (JSON.stringify(migratedProfile) !== JSON.stringify(parsedProfile)) {
+						localStorage.setItem('walkieWalkie_dogProfile', JSON.stringify(migratedProfile));
 					}
 				}
 			} catch (error) {
@@ -174,6 +208,75 @@ export const DogProfile = () => {
 					: dog
 			),
 		}));
+	};
+
+	// Handle XP gain from walks
+	const handleXPGained = (dogId, xpAmount) => {
+		setProfile(prev => {
+			const updatedProfile = {
+				...prev,
+				dogs: prev.dogs.map(dog => {
+					if (dog.id === dogId) {
+						const oldTotalXP = dog.totalXP || 0;
+						const newTotalXP = oldTotalXP + xpAmount;
+						const newLevel = calculateLevelFromXP(newTotalXP);
+						const oldLevel = calculateLevelFromXP(oldTotalXP);
+
+						// Check if dog leveled up - only alert once per level gain
+						if (newLevel > oldLevel) {
+							// Use setTimeout to avoid blocking the state update
+							setTimeout(() => {
+								alert(`🎉 ${dog.dogName} leveled up! Level ${oldLevel} → ${newLevel}!`);
+							}, 200);
+						}
+
+						return {
+							...dog,
+							totalXP: newTotalXP,
+							level: newLevel,
+							walksCompleted: (dog.walksCompleted || 0) + 1,
+							lastXPGain: xpAmount, // Track last XP gain for debugging
+						};
+					}
+					return dog;
+				}),
+			};
+
+			// Save to localStorage immediately after XP gain
+			try {
+				localStorage.setItem('walkieWalkie_dogProfile', JSON.stringify(updatedProfile));
+			} catch (error) {
+				console.error('Error saving profile after XP gain:', error);
+			}
+
+			return updatedProfile;
+		});
+	};
+
+	// Handle XP reset for development/testing
+	const handleResetXP = dogId => {
+		if (
+			window.confirm("Are you sure you want to reset this dog's XP? This action cannot be undone.")
+		) {
+			setProfile(prev => ({
+				...prev,
+				dogs: prev.dogs.map(dog => {
+					if (dog.id === dogId) {
+						return {
+							...dog,
+							totalXP: 0,
+							level: 1,
+							walksCompleted: 0,
+							achievements: [],
+							lastXPGain: 0,
+						};
+					}
+					return dog;
+				}),
+			}));
+
+			alert('🔄 XP has been reset to level 1!');
+		}
 	};
 
 	// Add new dog
@@ -333,6 +436,8 @@ export const DogProfile = () => {
 						onInputChange={handleDogInputChange}
 						onAddPreference={handleAddPreference}
 						onRemovePreference={handleRemovePreference}
+						onXPGained={handleXPGained}
+						onResetXP={handleResetXP}
 					/>
 				)}
 
