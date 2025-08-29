@@ -7,6 +7,8 @@ import { WalkingPreferencesEditor } from './WalkingPreferencesEditor';
 import { ExperienceBar } from './ExperienceBar';
 import { XPSimulator } from './XPSimulator';
 import { DogPhotoUpload } from './DogPhotoUpload';
+import { BadgeDisplay } from './BadgeDisplay';
+import { AchievementSimulator } from './AchievementSimulator';
 
 export const DogProfileForm = ({
 	dog,
@@ -19,6 +21,7 @@ export const DogProfileForm = ({
 	onResetXP,
 	onPhotoUpload,
 	onPhotoRemove,
+	onAchievementUpdate,
 }) => {
 	const hasFieldError = fieldName => {
 		const errorKey = `${dog.id}_${fieldName}`;
@@ -51,6 +54,11 @@ export const DogProfileForm = ({
 			{/* Experience Bar - Solo Leveling Style! */}
 			<div className='mb-6'>
 				<ExperienceBar totalXP={dog.totalXP || 0} showDetails={true} />
+			</div>
+
+			{/* Achievements and Badges */}
+			<div className='mb-6'>
+				<BadgeDisplay dog={dog} compact={isEditing} />
 			</div>
 
 			{/* Dog Information */}
@@ -226,6 +234,11 @@ export const DogProfileForm = ({
 
 				{/* XP Simulator - Development Tool */}
 				{onXPGained && <XPSimulator dog={dog} onXPGained={onXPGained} onResetXP={onResetXP} />}
+
+				{/* Achievement Simulator - Development Tool */}
+				{onAchievementUpdate && (
+					<AchievementSimulator dog={dog} onAchievementUpdate={onAchievementUpdate} />
+				)}
 			</div>
 		</div>
 	);
@@ -242,4 +255,5 @@ DogProfileForm.propTypes = {
 	onResetXP: PropTypes.func,
 	onPhotoUpload: PropTypes.func,
 	onPhotoRemove: PropTypes.func,
+	onAchievementUpdate: PropTypes.func,
 };
