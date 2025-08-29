@@ -12,6 +12,7 @@ import { WalkingHistory } from './pages/WalkingHistory';
 import { FavoriteWalks } from './pages/FavoriteWalks';
 import { MyWalks } from './pages/MyWalks';
 import { EventDetails } from './pages/EventDetails';
+import { ClinicPartnership } from './pages/ClinicPartnership';
 
 function App() {
 	return (
@@ -33,6 +34,7 @@ function App() {
 						<Route path='/profile' element={<DogProfile />} />
 						<Route path='/create-event' element={<CreateEvent />} />
 						<Route path='/event/:id' element={<EventDetails />} />
+						<Route path='/clinic-partnership' element={<ClinicPartnership />} />
 					</Routes>
 				</main>
 			</div>
