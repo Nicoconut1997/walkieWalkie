@@ -15,6 +15,7 @@ export const MyWalks = () => {
 	const [checkInPlaces, setCheckInPlaces] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [activeTab, setActiveTab] = useState('events'); // 'events' or 'places'
+	const [userReviews, setUserReviews] = useState([]);
 
 	// Load joined walks and check-in places from localStorage
 	useEffect(() => {
@@ -32,6 +33,10 @@ export const MyWalks = () => {
 
 				// Load check-in places
 				const savedCheckIns = localStorage.getItem('walkieWalkie_checkIns');
+				const savedReviews = localStorage.getItem('walkieWalkie_reviews');
+				const reviews = savedReviews ? JSON.parse(savedReviews) : [];
+				setUserReviews(reviews);
+
 				if (savedCheckIns) {
 					const checkIns = JSON.parse(savedCheckIns);
 
@@ -42,10 +47,16 @@ export const MyWalks = () => {
 							const place = sampleRoutes.find(route => route.id === placeId);
 							if (place) {
 								const placeCheckIns = checkIns.filter(checkIn => checkIn.placeId === placeId);
+								const placeReviews = reviews.filter(review => review.placeId === placeId);
 								return {
 									...place,
 									checkInCount: placeCheckIns.length,
 									lastCheckIn: placeCheckIns[placeCheckIns.length - 1].date,
+									userReviews: placeReviews,
+									userRating:
+										placeReviews.length > 0 ? placeReviews[placeReviews.length - 1].rating : null,
+									latestReview:
+										placeReviews.length > 0 ? placeReviews[placeReviews.length - 1] : null,
 								};
 							}
 							return null;
@@ -73,10 +84,12 @@ export const MyWalks = () => {
 
 		window.addEventListener('joinedWalksUpdated', handleDataUpdate);
 		window.addEventListener('checkInsUpdated', handleDataUpdate);
+		window.addEventListener('reviewsUpdated', handleDataUpdate);
 
 		return () => {
 			window.removeEventListener('joinedWalksUpdated', handleDataUpdate);
 			window.removeEventListener('checkInsUpdated', handleDataUpdate);
+			window.removeEventListener('reviewsUpdated', handleDataUpdate);
 		};
 	}, []);
 
@@ -210,6 +223,17 @@ export const MyWalks = () => {
 												onClick={() => navigate(`/place-detail/${place.id}`)}
 												className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6 cursor-pointer hover:transform hover:scale-105 transition-all duration-200 hover:shadow-lg'
 											>
+												{/* User Photo (if exists) */}
+												{place.latestReview?.photo && (
+													<div className='mb-3 -mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
+														<img
+															src={place.latestReview.photo}
+															alt={`Your photo from ${place.name}`}
+															className='w-full h-32 object-cover rounded-t-xl'
+														/>
+													</div>
+												)}
+
 												{/* Place Header */}
 												<div className='mb-3'>
 													<h3 className='walkie-main-title text-lg sm:text-xl font-bold mb-2 leading-tight'>
@@ -219,6 +243,29 @@ export const MyWalks = () => {
 														📍 {place.location}
 													</p>
 												</div>
+
+												{/* User Review (if exists) */}
+												{place.latestReview && (
+													<div className='mb-3 p-3 bg-orange-50 rounded-lg border border-orange-100'>
+														<div className='flex items-center gap-1 mb-1'>
+															<span className='text-sm font-medium text-orange-700'>
+																Your review:
+															</span>
+															<div className='flex'>
+																{[...Array(place.latestReview.rating)].map((_, i) => (
+																	<span key={i} className='text-yellow-400 text-xs'>
+																		⭐
+																	</span>
+																))}
+															</div>
+														</div>
+														{place.latestReview.comment && (
+															<p className='text-xs text-gray-700 italic'>
+																"{place.latestReview.comment}"
+															</p>
+														)}
+													</div>
+												)}
 
 												{/* Check-in Stats */}
 												<div className='grid grid-cols-2 gap-2 mb-3 text-xs sm:text-sm'>
