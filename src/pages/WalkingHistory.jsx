@@ -118,6 +118,16 @@ export const WalkingHistory = () => {
 	return (
 		<div className='walkie-background min-h-screen'>
 			<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'>
+				{/* Back Button */}
+				<div className='mb-4'>
+					<button
+						onClick={() => navigate('/my-walks')}
+						className='inline-flex items-center text-gray-600 hover:text-orange-500 transition-colors'
+					>
+						← Back to My Walks
+					</button>
+				</div>
+
 				{/* Page Header */}
 				<div className='text-center mb-6 sm:mb-8'>
 					<h1 className='walkie-main-title text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4'>
@@ -240,16 +250,6 @@ export const WalkingHistory = () => {
 							</button>
 						</div>
 					)}
-				</div>
-
-				{/* Back to My Walks */}
-				<div className='text-center mt-6'>
-					<button
-						onClick={() => navigate('/my-walks')}
-						className='text-gray-600 hover:text-orange-500 transition-colors'
-					>
-						← Back to My Walks
-					</button>
 				</div>
 			</div>
 		</div>
