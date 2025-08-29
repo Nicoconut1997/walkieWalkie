@@ -18,7 +18,7 @@ export const MyWalks = () => {
 	const [dogs, setDogs] = useState([]);
 	const [activeWalk, setActiveWalk] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [activeTab, setActiveTab] = useState('tracker'); // 'tracker', 'in-progress', 'events', or 'places'
+	const [activeTab, setActiveTab] = useState('tracker'); // 'tracker', 'in-progress', 'events', 'places', or 'history'
 	const [userReviews, setUserReviews] = useState([]);
 
 	// Check for URL params to set initial tab
@@ -217,17 +217,17 @@ export const MyWalks = () => {
 					<div className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-1 flex flex-wrap justify-center'>
 						<button
 							onClick={() => setActiveTab('tracker')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation ${
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base ${
 								activeTab === 'tracker'
 									? 'walkie-button text-white'
 									: 'text-gray-600 hover:text-gray-900'
 							}`}
 						>
-							🚶 Walk Tracker
+							🚶 Tracker
 						</button>
 						<button
 							onClick={() => setActiveTab('in-progress')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation ${
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base ${
 								activeTab === 'in-progress'
 									? 'walkie-button text-white'
 									: 'text-gray-600 hover:text-gray-900'
@@ -237,23 +237,29 @@ export const MyWalks = () => {
 						</button>
 						<button
 							onClick={() => setActiveTab('events')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation ${
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base ${
 								activeTab === 'events'
 									? 'walkie-button text-white'
 									: 'text-gray-600 hover:text-gray-900'
 							}`}
 						>
-							📅 Joined Events ({joinedWalks.length})
+							📅 Events ({joinedWalks.length})
 						</button>
 						<button
 							onClick={() => setActiveTab('places')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation ${
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base ${
 								activeTab === 'places'
 									? 'walkie-button text-white'
 									: 'text-gray-600 hover:text-gray-900'
 							}`}
 						>
-							📍 Check-in Places ({checkInPlaces.length})
+							📍 Places ({checkInPlaces.length})
+						</button>
+						<button
+							onClick={() => navigate('/walking-history')}
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base text-gray-600 hover:text-gray-900`}
+						>
+							📋 History
 						</button>
 					</div>
 				</div>

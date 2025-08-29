@@ -495,7 +495,6 @@ export const DogProfile = () => {
 					onSave={handleSave}
 					onCancel={handleCancel}
 					onEdit={() => setIsEditing(true)}
-					onNavigateToHistory={() => navigate('/walking-history')}
 				/>
 			</div>
 		</div>

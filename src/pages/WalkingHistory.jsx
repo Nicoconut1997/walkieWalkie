@@ -242,13 +242,13 @@ export const WalkingHistory = () => {
 					)}
 				</div>
 
-				{/* Back to Profile */}
+				{/* Back to My Walks */}
 				<div className='text-center mt-6'>
 					<button
-						onClick={() => navigate('/profile')}
+						onClick={() => navigate('/my-walks')}
 						className='text-gray-600 hover:text-orange-500 transition-colors'
 					>
-						← Back to Profile
+						← Back to My Walks
 					</button>
 				</div>
 			</div>
