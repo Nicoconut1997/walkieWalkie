@@ -28,6 +28,7 @@ export const DogProfile = () => {
 		walksCompleted: 0,
 		achievements: [],
 		lastXPGain: 0,
+		photo: null, // Base64 encoded photo or null
 	});
 
 	// Default profile with owner info and multiple dogs
@@ -48,6 +49,7 @@ export const DogProfile = () => {
 				level: 1,
 				walksCompleted: 8,
 				achievements: ['FIRST_WALK', 'EARLY_BIRD'],
+				photo: null,
 			},
 		],
 	};
@@ -83,6 +85,7 @@ export const DogProfile = () => {
 								level: parsedProfile.level || 1,
 								walksCompleted: parsedProfile.walksCompleted || 0,
 								achievements: parsedProfile.achievements || [],
+								photo: parsedProfile.photo || null,
 							},
 						],
 					};
@@ -90,17 +93,20 @@ export const DogProfile = () => {
 					// Save migrated format
 					localStorage.setItem('walkieWalkie_dogProfile', JSON.stringify(migratedProfile));
 				} else {
-					// Migrate existing dogs to include XP fields if missing
+					// Migrate existing dogs to include XP fields and photo field if missing
 					const migratedProfile = {
 						...parsedProfile,
 						dogs:
 							parsedProfile.dogs?.map(dog => ({
 								...dog,
+								// Add XP system fields if missing
 								totalXP: dog.totalXP || 0,
 								level: dog.level || 1,
 								walksCompleted: dog.walksCompleted || 0,
 								achievements: dog.achievements || [],
 								lastXPGain: dog.lastXPGain || 0,
+								// Add photo field if missing
+								photo: dog.photo || null,
 							})) || [],
 					};
 					setProfile(migratedProfile);
@@ -279,6 +285,46 @@ export const DogProfile = () => {
 		}
 	};
 
+	// Handle photo upload
+	const handlePhotoUpload = (dogId, file) => {
+		// Convert to base64
+		const reader = new FileReader();
+		reader.onload = e => {
+			const base64Photo = e.target.result;
+
+			// Optional: Compress image if it's very large (basic implementation)
+			const img = new Image();
+			img.onload = () => {
+				// If image is very large, we could resize it here
+				// For now, just store the base64 directly
+				setProfile(prev => ({
+					...prev,
+					dogs: prev.dogs.map(dog => (dog.id === dogId ? { ...dog, photo: base64Photo } : dog)),
+				}));
+
+				// Show success message
+				const selectedDog = profile.dogs.find(dog => dog.id === dogId);
+				const dogName = selectedDog?.dogName || 'Your dog';
+				console.log(`✅ Photo uploaded successfully for ${dogName}!`);
+			};
+			img.src = base64Photo;
+		};
+		reader.onerror = () => {
+			alert('❌ Error uploading photo. Please try again.');
+		};
+		reader.readAsDataURL(file);
+	};
+
+	// Handle photo removal
+	const handlePhotoRemove = dogId => {
+		if (window.confirm('Are you sure you want to remove this photo?')) {
+			setProfile(prev => ({
+				...prev,
+				dogs: prev.dogs.map(dog => (dog.id === dogId ? { ...dog, photo: null } : dog)),
+			}));
+		}
+	};
+
 	// Add new dog
 	const handleAddDog = () => {
 		const newDog = createDefaultDog();
@@ -438,6 +484,8 @@ export const DogProfile = () => {
 						onRemovePreference={handleRemovePreference}
 						onXPGained={handleXPGained}
 						onResetXP={handleResetXP}
+						onPhotoUpload={handlePhotoUpload}
+						onPhotoRemove={handlePhotoRemove}
 					/>
 				)}
 
