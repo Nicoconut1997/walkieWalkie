@@ -13,6 +13,7 @@ import { FavoriteWalks } from './pages/FavoriteWalks';
 import { MyWalks } from './pages/MyWalks';
 import { EventDetails } from './pages/EventDetails';
 import { ClinicPartnership } from './pages/ClinicPartnership';
+import { DogWalkerMarketplace } from './pages/DogWalkerMarketplace';
 
 function App() {
 	return (
@@ -35,6 +36,7 @@ function App() {
 						<Route path='/create-event' element={<CreateEvent />} />
 						<Route path='/event/:id' element={<EventDetails />} />
 						<Route path='/clinic-partnership' element={<ClinicPartnership />} />
+						<Route path='/marketplace' element={<DogWalkerMarketplace />} />
 					</Routes>
 				</main>
 			</div>
