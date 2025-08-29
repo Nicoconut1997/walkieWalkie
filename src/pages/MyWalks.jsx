@@ -210,19 +210,6 @@ export const MyWalks = () => {
 												onClick={() => navigate(`/place-detail/${place.id}`)}
 												className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6 cursor-pointer hover:transform hover:scale-105 transition-all duration-200 hover:shadow-lg'
 											>
-												{/* Place Image */}
-												<div className='mb-4'>
-													<img
-														src={place.photos[0]}
-														alt={place.name}
-														className='w-full h-48 object-cover rounded-lg'
-														onError={e => {
-															e.target.src =
-																'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTIwSDIyNVYxNDBIMjA1VjE2MEgyMjVWMTgwSDE3NVYxNjBIMTk1VjE0MEgxNzVWMTIwWiIgZmlsbD0iI0Q0RERFNCIvPgo8cGF0aCBkPSJNMTYwIDEwNUgxODBWMTI1SDE2MFYxMDVaIiBmaWxsPSIjRDREREU0Ii8+CjxwYXRoIGQ9Ik0yMjAgMTA1SDI0MFYxMjVIMjIwVjEwNVoiIGZpbGw9IiNENEREQTQiLz4KPHN2ZyBpZD0iSW1hZ2VfUGxhY2Vob2xkZXIiIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIj4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgQmxpbmtNYWNTeXN0ZW1Gb250LCBTZWdvZSBVSSwgUm9ib3RvLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmaWxsPSIjOTlBM0FFIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+CiAgICA8dHNwYW4geD0iNTAlIiBkeT0iLTEuMmVtIj7wn5OuIFBsYWNlIFBob3RvPC90c3Bhbj4KICA8L3RleHQ+Cjwvc3ZnPgo=';
-														}}
-													/>
-												</div>
-
 												{/* Place Header */}
 												<div className='mb-3'>
 													<h3 className='walkie-main-title text-lg sm:text-xl font-bold mb-2 leading-tight'>
