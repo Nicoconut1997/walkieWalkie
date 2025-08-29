@@ -1,7 +1,7 @@
 // walkieWalkie - Dog walking events application with responsive routing
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Navigation } from './components/Navigation';
+import { SidebarNavigation } from './components/SidebarNavigation';
 import { Home } from './pages/Home';
 import { DogWalks } from './pages/DogWalks';
 import { DogProfile } from './pages/DogProfile';
@@ -18,28 +18,22 @@ import { DogWalkerMarketplace } from './pages/DogWalkerMarketplace';
 function App() {
 	return (
 		<Router>
-			<div className='min-h-screen flex flex-col'>
-				{/* Navigation */}
-				<Navigation />
-
-				{/* Main Content */}
-				<main className='flex-1'>
-					<Routes>
-						<Route path='/' element={<Home />} />
-						<Route path='/walks' element={<DogWalks />} />
-						<Route path='/my-walks' element={<MyWalks />} />
-						<Route path='/favorites' element={<FavoriteWalks />} />
-						<Route path='/routes' element={<RoutesSuggestion />} />
-						<Route path='/place-detail/:placeId' element={<PlaceDetail />} />
-						<Route path='/walking-history' element={<WalkingHistory />} />
-						<Route path='/profile' element={<DogProfile />} />
-						<Route path='/create-event' element={<CreateEvent />} />
-						<Route path='/event/:id' element={<EventDetails />} />
-						<Route path='/clinic-partnership' element={<ClinicPartnership />} />
-						<Route path='/marketplace' element={<DogWalkerMarketplace />} />
-					</Routes>
-				</main>
-			</div>
+			<SidebarNavigation>
+				<Routes>
+					<Route path='/' element={<Home />} />
+					<Route path='/walks' element={<DogWalks />} />
+					<Route path='/my-walks' element={<MyWalks />} />
+					<Route path='/favorites' element={<FavoriteWalks />} />
+					<Route path='/routes' element={<RoutesSuggestion />} />
+					<Route path='/place-detail/:placeId' element={<PlaceDetail />} />
+					<Route path='/walking-history' element={<WalkingHistory />} />
+					<Route path='/profile' element={<DogProfile />} />
+					<Route path='/create-event' element={<CreateEvent />} />
+					<Route path='/event/:id' element={<EventDetails />} />
+					<Route path='/clinic-partnership' element={<ClinicPartnership />} />
+					<Route path='/marketplace' element={<DogWalkerMarketplace />} />
+				</Routes>
+			</SidebarNavigation>
 		</Router>
 	);
 }

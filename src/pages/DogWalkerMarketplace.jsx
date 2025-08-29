@@ -56,20 +56,18 @@ export const DogWalkerMarketplace = () => {
 	// Discovery View
 	if (currentView === 'discovery') {
 		return (
-			<div className='min-h-screen bg-gray-50'>
-				<WalkerDiscovery
-					walkers={SAMPLE_WALKERS}
-					onBookWalk={handleBookWalk}
-					onSelectWalker={handleSelectWalker}
-				/>
-			</div>
+			<WalkerDiscovery
+				walkers={SAMPLE_WALKERS}
+				onBookWalk={handleBookWalk}
+				onSelectWalker={handleSelectWalker}
+			/>
 		);
 	}
 
 	// Walker Profile View
 	if (currentView === 'profile' && selectedWalker) {
 		return (
-			<div className='min-h-screen bg-gray-50 py-6'>
+			<div className='bg-gray-50 min-h-screen py-6'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 					{/* Navigation */}
 					<div className='mb-6'>
@@ -146,7 +144,7 @@ export const DogWalkerMarketplace = () => {
 	// Booking View
 	if (currentView === 'booking' && selectedWalker) {
 		return (
-			<div className='min-h-screen bg-gray-50 py-6'>
+			<div className='bg-gray-50 min-h-screen py-6'>
 				<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
 					{/* Navigation */}
 					<div className='mb-6'>
@@ -175,7 +173,7 @@ export const DogWalkerMarketplace = () => {
 		const latestBooking = bookingHistory[bookingHistory.length - 1];
 
 		return (
-			<div className='min-h-screen bg-gray-50 py-6'>
+			<div className='bg-gray-50 min-h-screen py-6'>
 				<div className='max-w-2xl mx-auto px-4 sm:px-6 lg:px-8'>
 					<div className='bg-white rounded-xl border border-gray-200 shadow-lg p-8 text-center'>
 						{/* Success Icon */}
@@ -279,7 +277,7 @@ export const DogWalkerMarketplace = () => {
 
 	// Fallback
 	return (
-		<div className='min-h-screen bg-gray-50 flex items-center justify-center'>
+		<div className='bg-gray-50 min-h-screen flex items-center justify-center'>
 			<div className='text-center'>
 				<div className='text-6xl mb-4'>🔄</div>
 				<h2 className='text-xl font-semibold text-gray-900'>Loading...</h2>

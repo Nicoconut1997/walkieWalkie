@@ -107,178 +107,186 @@ export const WalkerDiscovery = ({ walkers, onBookWalk, onSelectWalker }) => {
 	].filter(Boolean).length;
 
 	return (
-		<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
-			{/* Header */}
-			<div className='mb-8'>
-				<h1 className='text-3xl font-bold text-gray-900 mb-2'>Find Your Perfect Dog Walker</h1>
-				<p className='text-lg text-gray-600'>Discover trusted, verified dog walkers in your area</p>
-			</div>
-
-			{/* Search and Filters */}
-			<div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6'>
-				{/* Search Bar */}
-				<div className='mb-6'>
-					<div className='relative'>
-						<div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-							<span className='text-gray-400'>🔍</span>
-						</div>
-						<input
-							type='text'
-							placeholder='Search by name, specialty, or area...'
-							value={searchQuery}
-							onChange={e => setSearchQuery(e.target.value)}
-							className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-colors duration-200'
-						/>
-					</div>
+		<div className='bg-gray-50 min-h-screen'>
+			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+				{/* Header */}
+				<div className='mb-8'>
+					<h1 className='text-3xl font-bold text-gray-900 mb-2'>Find Your Perfect Dog Walker</h1>
+					<p className='text-lg text-gray-600'>
+						Discover trusted, verified dog walkers in your area
+					</p>
 				</div>
 
-				{/* Filters Row */}
-				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4'>
-					{/* Price Range */}
-					<div>
-						<label className='block text-sm font-medium text-gray-700 mb-2'>
-							Price Range (${priceRange.min} - ${priceRange.max}/hr)
-						</label>
-						<div className='flex items-center space-x-2'>
+				{/* Search and Filters */}
+				<div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6'>
+					{/* Search Bar */}
+					<div className='mb-6'>
+						<div className='relative'>
+							<div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
+								<span className='text-gray-400'>🔍</span>
+							</div>
 							<input
-								type='range'
-								min='0'
-								max='100'
-								value={priceRange.min}
-								onChange={e => setPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
-								className='flex-1'
-							/>
-							<input
-								type='range'
-								min='0'
-								max='100'
-								value={priceRange.max}
-								onChange={e => setPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
-								className='flex-1'
+								type='text'
+								placeholder='Search by name, specialty, or area...'
+								value={searchQuery}
+								onChange={e => setSearchQuery(e.target.value)}
+								className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-colors duration-200'
 							/>
 						</div>
 					</div>
 
-					{/* Rating Filter */}
-					<div>
-						<label className='block text-sm font-medium text-gray-700 mb-2'>Minimum Rating</label>
-						<select
-							value={ratingFilter}
-							onChange={e => setRatingFilter(parseFloat(e.target.value))}
-							className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100'
-						>
-							<option value={0}>Any Rating</option>
-							<option value={4.5}>4.5+ Stars</option>
-							<option value={4.0}>4.0+ Stars</option>
-							<option value={3.5}>3.5+ Stars</option>
-						</select>
-					</div>
+					{/* Filters Row */}
+					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4'>
+						{/* Price Range */}
+						<div>
+							<label className='block text-sm font-medium text-gray-700 mb-2'>
+								Price Range (${priceRange.min} - ${priceRange.max}/hr)
+							</label>
+							<div className='flex items-center space-x-2'>
+								<input
+									type='range'
+									min='0'
+									max='100'
+									value={priceRange.min}
+									onChange={e =>
+										setPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) }))
+									}
+									className='flex-1'
+								/>
+								<input
+									type='range'
+									min='0'
+									max='100'
+									value={priceRange.max}
+									onChange={e =>
+										setPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) }))
+									}
+									className='flex-1'
+								/>
+							</div>
+						</div>
 
-					{/* Availability Filter */}
-					<div>
-						<label className='block text-sm font-medium text-gray-700 mb-2'>Available Day</label>
-						<select
-							value={availabilityFilter}
-							onChange={e => setAvailabilityFilter(e.target.value)}
-							className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100'
-						>
-							<option value=''>Any Day</option>
-							<option value='monday'>Monday</option>
-							<option value='tuesday'>Tuesday</option>
-							<option value='wednesday'>Wednesday</option>
-							<option value='thursday'>Thursday</option>
-							<option value='friday'>Friday</option>
-							<option value='saturday'>Saturday</option>
-							<option value='sunday'>Sunday</option>
-						</select>
-					</div>
-
-					{/* Sort By */}
-					<div>
-						<label className='block text-sm font-medium text-gray-700 mb-2'>Sort By</label>
-						<select
-							value={sortBy}
-							onChange={e => setSortBy(e.target.value)}
-							className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100'
-						>
-							<option value='rating'>Highest Rated</option>
-							<option value='price-low'>Price: Low to High</option>
-							<option value='price-high'>Price: High to Low</option>
-							<option value='experience'>Most Experience</option>
-							<option value='reviews'>Most Reviews</option>
-						</select>
-					</div>
-				</div>
-
-				{/* Specialty Filters */}
-				<div className='mb-4'>
-					<label className='block text-sm font-medium text-gray-700 mb-3'>Specialties</label>
-					<div className='flex flex-wrap gap-2'>
-						{allSpecialties.map(specialty => (
-							<button
-								key={specialty}
-								onClick={() => handleSpecialtyToggle(specialty)}
-								className={`px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200 ${
-									selectedSpecialties.includes(specialty)
-										? 'bg-blue-600 text-white'
-										: 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-								}`}
+						{/* Rating Filter */}
+						<div>
+							<label className='block text-sm font-medium text-gray-700 mb-2'>Minimum Rating</label>
+							<select
+								value={ratingFilter}
+								onChange={e => setRatingFilter(parseFloat(e.target.value))}
+								className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100'
 							>
-								{specialty}
-							</button>
-						))}
-					</div>
-				</div>
+								<option value={0}>Any Rating</option>
+								<option value={4.5}>4.5+ Stars</option>
+								<option value={4.0}>4.0+ Stars</option>
+								<option value={3.5}>3.5+ Stars</option>
+							</select>
+						</div>
 
-				{/* Filter Summary and Clear */}
-				<div className='flex items-center justify-between pt-4 border-t border-gray-200'>
-					<div className='text-sm text-gray-600'>
-						{filteredWalkers.length} walker{filteredWalkers.length !== 1 ? 's' : ''} found
+						{/* Availability Filter */}
+						<div>
+							<label className='block text-sm font-medium text-gray-700 mb-2'>Available Day</label>
+							<select
+								value={availabilityFilter}
+								onChange={e => setAvailabilityFilter(e.target.value)}
+								className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100'
+							>
+								<option value=''>Any Day</option>
+								<option value='monday'>Monday</option>
+								<option value='tuesday'>Tuesday</option>
+								<option value='wednesday'>Wednesday</option>
+								<option value='thursday'>Thursday</option>
+								<option value='friday'>Friday</option>
+								<option value='saturday'>Saturday</option>
+								<option value='sunday'>Sunday</option>
+							</select>
+						</div>
+
+						{/* Sort By */}
+						<div>
+							<label className='block text-sm font-medium text-gray-700 mb-2'>Sort By</label>
+							<select
+								value={sortBy}
+								onChange={e => setSortBy(e.target.value)}
+								className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100'
+							>
+								<option value='rating'>Highest Rated</option>
+								<option value='price-low'>Price: Low to High</option>
+								<option value='price-high'>Price: High to Low</option>
+								<option value='experience'>Most Experience</option>
+								<option value='reviews'>Most Reviews</option>
+							</select>
+						</div>
+					</div>
+
+					{/* Specialty Filters */}
+					<div className='mb-4'>
+						<label className='block text-sm font-medium text-gray-700 mb-3'>Specialties</label>
+						<div className='flex flex-wrap gap-2'>
+							{allSpecialties.map(specialty => (
+								<button
+									key={specialty}
+									onClick={() => handleSpecialtyToggle(specialty)}
+									className={`px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200 ${
+										selectedSpecialties.includes(specialty)
+											? 'bg-blue-600 text-white'
+											: 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+									}`}
+								>
+									{specialty}
+								</button>
+							))}
+						</div>
+					</div>
+
+					{/* Filter Summary and Clear */}
+					<div className='flex items-center justify-between pt-4 border-t border-gray-200'>
+						<div className='text-sm text-gray-600'>
+							{filteredWalkers.length} walker{filteredWalkers.length !== 1 ? 's' : ''} found
+							{activeFiltersCount > 0 && (
+								<span className='ml-2'>
+									• {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
+								</span>
+							)}
+						</div>
 						{activeFiltersCount > 0 && (
-							<span className='ml-2'>
-								• {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
-							</span>
+							<button
+								onClick={clearAllFilters}
+								className='text-sm text-blue-600 hover:text-blue-800 font-medium'
+							>
+								Clear All Filters
+							</button>
 						)}
 					</div>
-					{activeFiltersCount > 0 && (
+				</div>
+
+				{/* Results Grid */}
+				{filteredWalkers.length > 0 ? (
+					<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
+						{filteredWalkers.map(walker => (
+							<div
+								key={walker.id}
+								className='cursor-pointer transform hover:scale-105 transition-transform duration-200'
+								onClick={() => onSelectWalker && onSelectWalker(walker)}
+							>
+								<DogWalkerProfile walker={walker} onBookWalk={onBookWalk} compact={true} />
+							</div>
+						))}
+					</div>
+				) : (
+					<div className='text-center py-12'>
+						<div className='text-6xl mb-4'>🔍</div>
+						<h3 className='text-xl font-semibold text-gray-900 mb-2'>No walkers found</h3>
+						<p className='text-gray-600 mb-4'>
+							Try adjusting your filters or search terms to find more results.
+						</p>
 						<button
 							onClick={clearAllFilters}
-							className='text-sm text-blue-600 hover:text-blue-800 font-medium'
+							className='bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200'
 						>
 							Clear All Filters
 						</button>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
-
-			{/* Results Grid */}
-			{filteredWalkers.length > 0 ? (
-				<div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6'>
-					{filteredWalkers.map(walker => (
-						<div
-							key={walker.id}
-							className='cursor-pointer'
-							onClick={() => onSelectWalker && onSelectWalker(walker)}
-						>
-							<DogWalkerProfile walker={walker} onBookWalk={onBookWalk} compact={true} />
-						</div>
-					))}
-				</div>
-			) : (
-				<div className='text-center py-12'>
-					<div className='text-6xl mb-4'>🔍</div>
-					<h3 className='text-xl font-semibold text-gray-900 mb-2'>No walkers found</h3>
-					<p className='text-gray-600 mb-4'>
-						Try adjusting your filters or search terms to find more results.
-					</p>
-					<button
-						onClick={clearAllFilters}
-						className='bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200'
-					>
-						Clear All Filters
-					</button>
-				</div>
-			)}
 		</div>
 	);
 };

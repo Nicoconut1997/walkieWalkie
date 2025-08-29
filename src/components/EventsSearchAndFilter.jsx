@@ -254,7 +254,7 @@ export const EventsSearchAndFilter = ({
 	return (
 		<div className='space-y-4 sm:space-y-6'>
 			{/* Combined Search Bar and Filter Controls */}
-			<div className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6'>
+			<div className='walkie-section-border rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6'>
 				{/* Search Bar with Filters Button */}
 				<div className='flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center'>
 					{/* Search Bar */}

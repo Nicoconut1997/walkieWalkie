@@ -34,17 +34,17 @@ export const DogWalkerProfile = ({ walker, onBookWalk, compact = false }) => {
 	// Compact view for discovery/listing
 	if (compact) {
 		return (
-			<div className='bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:shadow-md transition-shadow duration-200'>
-				<div className='flex items-start space-x-4'>
+			<div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow duration-200 h-full flex flex-col'>
+				<div className='flex items-start space-x-4 mb-4'>
 					{/* Profile Image */}
-					<div className='text-4xl flex-shrink-0'>{walker.profileImage}</div>
+					<div className='text-5xl flex-shrink-0'>{walker.profileImage}</div>
 
-					{/* Main Info */}
+					{/* Header Info */}
 					<div className='flex-1 min-w-0'>
-						<div className='flex items-start justify-between'>
+						<div className='flex items-start justify-between mb-2'>
 							<div>
-								<h3 className='text-lg font-bold text-gray-900 truncate'>{walker.name}</h3>
-								<div className='flex items-center space-x-2 mt-1'>
+								<h3 className='text-xl font-bold text-gray-900 mb-1'>{walker.name}</h3>
+								<div className='flex items-center space-x-2'>
 									<span className='text-sm text-yellow-600'>{getStarRating(walker.rating)}</span>
 									<span className='text-sm text-gray-600'>({walker.reviewCount})</span>
 									<span className='text-sm text-gray-400'>•</span>
@@ -52,30 +52,55 @@ export const DogWalkerProfile = ({ walker, onBookWalk, compact = false }) => {
 								</div>
 							</div>
 							<div className='text-right flex-shrink-0'>
-								<div className='text-lg font-bold text-green-600'>${walker.hourlyRate}/hr</div>
+								<div className='text-xl font-bold text-green-600'>${walker.hourlyRate}/hr</div>
 								{walker.responseTime && (
 									<div className='text-xs text-gray-500'>{walker.responseTime}</div>
 								)}
 							</div>
 						</div>
-
-						<p className='text-sm text-gray-600 mt-2 line-clamp-2'>{formatBio(walker.bio)}</p>
-
-						{/* Specialties */}
-						<div className='flex flex-wrap gap-1 mt-3'>
-							{walker.specialties.slice(0, 3).map((specialty, index) => (
-								<span
-									key={index}
-									className='bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full'
-								>
-									{specialty}
-								</span>
-							))}
-							{walker.specialties.length > 3 && (
-								<span className='text-xs text-gray-500'>+{walker.specialties.length - 3} more</span>
-							)}
-						</div>
 					</div>
+				</div>
+
+				{/* Bio */}
+				<div className='flex-1 mb-4'>
+					<p className='text-sm text-gray-600 leading-relaxed'>{formatBio(walker.bio)}</p>
+				</div>
+
+				{/* Service Details */}
+				<div className='grid grid-cols-2 gap-3 text-xs text-gray-600 mb-4'>
+					<div>
+						<span className='font-medium'>Areas:</span>
+						<div className='text-gray-800'>{walker.serviceArea.slice(0, 2).join(', ')}</div>
+					</div>
+					<div>
+						<span className='font-medium'>Group Size:</span>
+						<div className='text-gray-800'>{walker.groupSize}</div>
+					</div>
+				</div>
+
+				{/* Verification Badge */}
+				{walker.backgroundCheck.verified && (
+					<div className='flex items-center text-xs text-green-600 mb-4'>
+						<span className='mr-1'>✅</span>
+						<span className='font-medium'>Background Verified</span>
+					</div>
+				)}
+
+				{/* Specialties */}
+				<div className='flex flex-wrap gap-2'>
+					{walker.specialties.slice(0, 3).map((specialty, index) => (
+						<span
+							key={index}
+							className='bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium'
+						>
+							{specialty}
+						</span>
+					))}
+					{walker.specialties.length > 3 && (
+						<span className='text-xs text-gray-500 px-2 py-1'>
+							+{walker.specialties.length - 3} more
+						</span>
+					)}
 				</div>
 			</div>
 		);
