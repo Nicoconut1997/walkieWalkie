@@ -7,7 +7,12 @@ import { OwnerInfoForm } from '../components/OwnerInfoForm';
 import { DogTabsNav } from '../components/DogTabsNav';
 import { DogProfileForm } from '../components/DogProfileForm';
 import { ProfileActions } from '../components/ProfileActions';
-import { calculateLevelFromXP } from '../data/constants';
+import {
+	calculateLevelFromXP,
+	checkAchievements,
+	calculateAchievementBonus,
+	ACHIEVEMENTS,
+} from '../data/constants';
 
 export const DogProfile = () => {
 	const navigate = useNavigate();
@@ -48,7 +53,7 @@ export const DogProfile = () => {
 				totalXP: 150,
 				level: 1,
 				walksCompleted: 8,
-				achievements: ['FIRST_WALK', 'EARLY_BIRD'],
+				achievements: ['FIRST_WALK', 'EARLY_ADOPTER', 'WEEKEND_WARRIOR'],
 				photo: null,
 			},
 		],
@@ -84,7 +89,7 @@ export const DogProfile = () => {
 								totalXP: parsedProfile.totalXP || 0,
 								level: parsedProfile.level || 1,
 								walksCompleted: parsedProfile.walksCompleted || 0,
-								achievements: parsedProfile.achievements || [],
+								achievements: parsedProfile.achievements || ['EARLY_ADOPTER'],
 								photo: parsedProfile.photo || null,
 							},
 						],
@@ -103,7 +108,7 @@ export const DogProfile = () => {
 								totalXP: dog.totalXP || 0,
 								level: dog.level || 1,
 								walksCompleted: dog.walksCompleted || 0,
-								achievements: dog.achievements || [],
+								achievements: dog.achievements || ['EARLY_ADOPTER'],
 								lastXPGain: dog.lastXPGain || 0,
 								// Add photo field if missing
 								photo: dog.photo || null,
@@ -217,31 +222,61 @@ export const DogProfile = () => {
 	};
 
 	// Handle XP gain from walks
-	const handleXPGained = (dogId, xpAmount) => {
+	const handleXPGained = (dogId, xpAmount, walkData = {}) => {
 		setProfile(prev => {
 			const updatedProfile = {
 				...prev,
 				dogs: prev.dogs.map(dog => {
 					if (dog.id === dogId) {
 						const oldTotalXP = dog.totalXP || 0;
-						const newTotalXP = oldTotalXP + xpAmount;
-						const newLevel = calculateLevelFromXP(newTotalXP);
 						const oldLevel = calculateLevelFromXP(oldTotalXP);
 
-						// Check if dog leveled up - only alert once per level gain
-						if (newLevel > oldLevel) {
-							// Use setTimeout to avoid blocking the state update
+						// Create updated dog stats for achievement checking
+						const updatedDog = {
+							...dog,
+							totalXP: oldTotalXP + xpAmount,
+							level: calculateLevelFromXP(oldTotalXP + xpAmount),
+							walksCompleted: (dog.walksCompleted || 0) + 1,
+							lastXPGain: xpAmount,
+						};
+
+						// Check for new achievements
+						const newAchievements = checkAchievements(updatedDog, walkData);
+						const achievementBonus = calculateAchievementBonus(newAchievements);
+
+						// Apply achievement bonus to XP
+						const finalTotalXP = updatedDog.totalXP + achievementBonus;
+						const finalLevel = calculateLevelFromXP(finalTotalXP);
+
+						// Notifications
+						if (finalLevel > oldLevel) {
 							setTimeout(() => {
-								alert(`🎉 ${dog.dogName} leveled up! Level ${oldLevel} → ${newLevel}!`);
+								alert(`🎉 ${dog.dogName} leveled up! Level ${oldLevel} → ${finalLevel}!`);
 							}, 200);
 						}
 
+						if (newAchievements.length > 0) {
+							setTimeout(() => {
+								const achievementNames = newAchievements
+									.map(id => {
+										const achievement = Object.values(ACHIEVEMENTS).find(a => a.id === id);
+										return achievement ? `${achievement.emoji} ${achievement.name}` : id;
+									})
+									.join(', ');
+								alert(
+									`🏆 New Achievement${
+										newAchievements.length > 1 ? 's' : ''
+									} Unlocked!\n${achievementNames}\n+${achievementBonus} Bonus XP!`
+								);
+							}, 500);
+						}
+
 						return {
-							...dog,
-							totalXP: newTotalXP,
-							level: newLevel,
-							walksCompleted: (dog.walksCompleted || 0) + 1,
-							lastXPGain: xpAmount, // Track last XP gain for debugging
+							...updatedDog,
+							totalXP: finalTotalXP,
+							level: finalLevel,
+							achievements: [...(dog.achievements || []), ...newAchievements],
+							lastXPGain: xpAmount + achievementBonus,
 						};
 					}
 					return dog;
@@ -323,6 +358,34 @@ export const DogProfile = () => {
 				dogs: prev.dogs.map(dog => (dog.id === dogId ? { ...dog, photo: null } : dog)),
 			}));
 		}
+	};
+
+	// Handle achievement updates (dev tool)
+	const handleAchievementUpdate = (dogId, updates) => {
+		setProfile(prev => {
+			const updatedProfile = {
+				...prev,
+				dogs: prev.dogs.map(dog => {
+					if (dog.id === dogId) {
+						// Apply level calculation if totalXP changed
+						const newTotalXP = updates.totalXP !== undefined ? updates.totalXP : dog.totalXP;
+						const newLevel = calculateLevelFromXP(newTotalXP || 0);
+
+						return {
+							...dog,
+							...updates,
+							totalXP: newTotalXP,
+							level: newLevel,
+						};
+					}
+					return dog;
+				}),
+			};
+
+			// Save updated profile
+			localStorage.setItem('walkieWalkie_dogProfile', JSON.stringify(updatedProfile));
+			return updatedProfile;
+		});
 	};
 
 	// Add new dog
@@ -486,6 +549,7 @@ export const DogProfile = () => {
 						onResetXP={handleResetXP}
 						onPhotoUpload={handlePhotoUpload}
 						onPhotoRemove={handlePhotoRemove}
+						onAchievementUpdate={handleAchievementUpdate}
 					/>
 				)}
 

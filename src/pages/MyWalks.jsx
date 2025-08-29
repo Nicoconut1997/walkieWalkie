@@ -7,7 +7,12 @@ import { EventCard } from '../components/EventCard';
 import { WalkTracker } from '../components/WalkTracker';
 import { sampleEvents } from '../data/sampleEvents';
 import { sampleRoutes } from '../data/sampleRoutes';
-import { calculateLevelFromXP } from '../data/constants';
+import {
+	calculateLevelFromXP,
+	checkAchievements,
+	calculateAchievementBonus,
+	ACHIEVEMENTS,
+} from '../data/constants';
 
 export const MyWalks = () => {
 	const navigate = useNavigate();
@@ -150,23 +155,54 @@ export const MyWalks = () => {
 				dogs: profile.dogs.map(dog => {
 					if (dog.id === dogId) {
 						const oldTotalXP = dog.totalXP || 0;
-						const newTotalXP = oldTotalXP + xpGained;
-						const newLevel = calculateLevelFromXP(newTotalXP);
 						const oldLevel = calculateLevelFromXP(oldTotalXP);
 
-						// Check if dog leveled up
-						if (newLevel > oldLevel) {
+						// Create updated dog stats for achievement checking
+						const updatedDog = {
+							...dog,
+							totalXP: oldTotalXP + xpGained,
+							level: calculateLevelFromXP(oldTotalXP + xpGained),
+							walksCompleted: (dog.walksCompleted || 0) + 1,
+							lastXPGain: xpGained,
+						};
+
+						// Check for new achievements
+						const newAchievements = checkAchievements(updatedDog, walkDetails);
+						const achievementBonus = calculateAchievementBonus(newAchievements);
+
+						// Apply achievement bonus to XP
+						const finalTotalXP = updatedDog.totalXP + achievementBonus;
+						const finalLevel = calculateLevelFromXP(finalTotalXP);
+
+						// Notifications
+						if (finalLevel > oldLevel) {
 							setTimeout(() => {
-								alert(`🎉 ${dog.dogName} leveled up! Level ${oldLevel} → ${newLevel}!`);
+								alert(`🎉 ${dog.dogName} leveled up! Level ${oldLevel} → ${finalLevel}!`);
 							}, 500);
 						}
 
+						if (newAchievements.length > 0) {
+							setTimeout(() => {
+								const achievementNames = newAchievements
+									.map(id => {
+										const achievement = Object.values(ACHIEVEMENTS).find(a => a.id === id);
+										return achievement ? `${achievement.emoji} ${achievement.name}` : id;
+									})
+									.join(', ');
+								alert(
+									`🏆 New Achievement${
+										newAchievements.length > 1 ? 's' : ''
+									} Unlocked!\n${achievementNames}\n+${achievementBonus} Bonus XP!`
+								);
+							}, 700);
+						}
+
 						return {
-							...dog,
-							totalXP: newTotalXP,
-							level: newLevel,
-							walksCompleted: (dog.walksCompleted || 0) + 1,
-							lastXPGain: xpGained,
+							...updatedDog,
+							totalXP: finalTotalXP,
+							level: finalLevel,
+							achievements: [...(dog.achievements || []), ...newAchievements],
+							lastXPGain: xpGained + achievementBonus,
 						};
 					}
 					return dog;
