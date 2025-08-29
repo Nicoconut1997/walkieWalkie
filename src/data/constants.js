@@ -22,6 +22,13 @@ export const DOG_SIZES = [
 	{ value: 'large', label: 'Large Dogs', emoji: '🐕‍🦺' },
 ];
 
+// Dog size options for profile forms
+export const DOG_SIZE_OPTIONS = [
+	{ value: 'Small', label: 'Small (under 25 lbs)', emoji: '🐕‍🦺' },
+	{ value: 'Medium', label: 'Medium (25-60 lbs)', emoji: '🐕' },
+	{ value: 'Large', label: 'Large (over 60 lbs)', emoji: '🐕‍🦺' },
+];
+
 export const TIME_OF_DAY = [
 	{ value: 'morning', label: 'Morning (6AM-12PM)', emoji: '🌅' },
 	{ value: 'afternoon', label: 'Afternoon (12PM-5PM)', emoji: '☀️' },
