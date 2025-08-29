@@ -4,6 +4,7 @@
 import PropTypes from 'prop-types';
 import { ENERGY_LEVELS, FRIENDLINESS_LEVELS, DOG_SIZE_OPTIONS } from '../data/constants';
 import { WalkingPreferencesEditor } from './WalkingPreferencesEditor';
+import { DogPhotoUpload } from './DogPhotoUpload';
 
 export const DogProfileForm = ({
 	dog,
@@ -12,6 +13,8 @@ export const DogProfileForm = ({
 	onInputChange,
 	onAddPreference,
 	onRemovePreference,
+	onPhotoUpload,
+	onPhotoRemove,
 }) => {
 	const hasFieldError = fieldName => {
 		const errorKey = `${dog.id}_${fieldName}`;
@@ -33,15 +36,13 @@ export const DogProfileForm = ({
 
 	return (
 		<div className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6 mb-4 sm:mb-6'>
-			{/* Dog Photo Placeholder */}
-			<div className='text-center mb-6'>
-				<div className='w-24 h-24 sm:w-32 sm:h-32 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-4xl sm:text-6xl mb-4'>
-					🐕
-				</div>
-				<button className='text-primary-500 hover:text-primary-600 font-medium transition-colors duration-200 text-sm sm:text-base min-h-[44px] touch-manipulation'>
-					📸 Add Photo
-				</button>
-			</div>
+			{/* Dog Photo Upload */}
+			<DogPhotoUpload
+				dog={dog}
+				isEditing={isEditing}
+				onPhotoUpload={onPhotoUpload}
+				onPhotoRemove={onPhotoRemove}
+			/>
 
 			{/* Dog Information */}
 			<div className='space-y-6'>
@@ -225,4 +226,6 @@ DogProfileForm.propTypes = {
 	onInputChange: PropTypes.func.isRequired,
 	onAddPreference: PropTypes.func.isRequired,
 	onRemovePreference: PropTypes.func.isRequired,
+	onPhotoUpload: PropTypes.func,
+	onPhotoRemove: PropTypes.func,
 };
