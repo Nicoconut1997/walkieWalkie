@@ -29,12 +29,14 @@ export const ProfileActions = ({ isEditing, onSave, onCancel, onEdit, onNavigate
 					>
 						✏️ Edit Profiles
 					</button>
-					<button
-						onClick={onNavigateToHistory}
-						className='flex-1 inline-flex items-center justify-center font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 text-base rounded-xl transition-colors duration-200 min-h-[48px] touch-manipulation'
-					>
-						📋 Walking History
-					</button>
+					{onNavigateToHistory && (
+						<button
+							onClick={onNavigateToHistory}
+							className='flex-1 inline-flex items-center justify-center font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 text-base rounded-xl transition-colors duration-200 min-h-[48px] touch-manipulation'
+						>
+							📋 Walking History
+						</button>
+					)}
 				</>
 			)}
 		</div>
@@ -46,5 +48,5 @@ ProfileActions.propTypes = {
 	onSave: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired,
 	onEdit: PropTypes.func.isRequired,
-	onNavigateToHistory: PropTypes.func.isRequired,
+	onNavigateToHistory: PropTypes.func,
 };

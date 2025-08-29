@@ -14,7 +14,7 @@ export const MyWalks = () => {
 	const [joinedWalks, setJoinedWalks] = useState([]);
 	const [checkInPlaces, setCheckInPlaces] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [activeTab, setActiveTab] = useState('events'); // 'events' or 'places'
+	const [activeTab, setActiveTab] = useState('events'); // 'events', 'places', or 'history'
 	const [userReviews, setUserReviews] = useState([]);
 
 	// Load joined walks and check-in places from localStorage
@@ -117,26 +117,32 @@ export const MyWalks = () => {
 
 				{/* Tabs */}
 				<div className='flex justify-center mb-6'>
-					<div className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-1 flex'>
+					<div className='walkie-section-border bg-white rounded-xl border border-gray-200 shadow-sm p-1 flex flex-wrap'>
 						<button
 							onClick={() => setActiveTab('events')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation ${
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base ${
 								activeTab === 'events'
 									? 'walkie-button text-white'
 									: 'text-gray-600 hover:text-gray-900'
 							}`}
 						>
-							📅 Joined Events ({joinedWalks.length})
+							📅 Events ({joinedWalks.length})
 						</button>
 						<button
 							onClick={() => setActiveTab('places')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation ${
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base ${
 								activeTab === 'places'
 									? 'walkie-button text-white'
 									: 'text-gray-600 hover:text-gray-900'
 							}`}
 						>
-							📍 Check-in Places ({checkInPlaces.length})
+							📍 Places ({checkInPlaces.length})
+						</button>
+						<button
+							onClick={() => navigate('/walking-history')}
+							className={`px-3 py-2 rounded-lg font-medium transition-colors min-h-[44px] touch-manipulation text-sm sm:text-base text-gray-600 hover:text-gray-900`}
+						>
+							📋 History
 						</button>
 					</div>
 				</div>
