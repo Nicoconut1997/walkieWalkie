@@ -17,6 +17,7 @@ export const Navigation = () => {
 		{ name: 'My Walks', path: '/my-walks' },
 		{ name: 'Create Event', path: '/create-event' },
 		{ name: 'Dog Profile', path: '/profile' },
+		{ name: 'Clinic Partnership', path: '/clinic-partnership' },
 	];
 
 	// Functions
