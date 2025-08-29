@@ -193,7 +193,7 @@ export const DogProfile = () => {
 		const reader = new FileReader();
 		reader.onload = e => {
 			const base64Photo = e.target.result;
-			
+
 			// Optional: Compress image if it's very large (basic implementation)
 			const img = new Image();
 			img.onload = () => {
@@ -201,11 +201,9 @@ export const DogProfile = () => {
 				// For now, just store the base64 directly
 				setProfile(prev => ({
 					...prev,
-					dogs: prev.dogs.map(dog =>
-						dog.id === dogId ? { ...dog, photo: base64Photo } : dog
-					),
+					dogs: prev.dogs.map(dog => (dog.id === dogId ? { ...dog, photo: base64Photo } : dog)),
 				}));
-				
+
 				// Show success message
 				const selectedDog = profile.dogs.find(dog => dog.id === dogId);
 				const dogName = selectedDog?.dogName || 'Your dog';
@@ -224,9 +222,7 @@ export const DogProfile = () => {
 		if (window.confirm('Are you sure you want to remove this photo?')) {
 			setProfile(prev => ({
 				...prev,
-				dogs: prev.dogs.map(dog =>
-					dog.id === dogId ? { ...dog, photo: null } : dog
-				),
+				dogs: prev.dogs.map(dog => (dog.id === dogId ? { ...dog, photo: null } : dog)),
 			}));
 		}
 	};
@@ -399,7 +395,6 @@ export const DogProfile = () => {
 					onSave={handleSave}
 					onCancel={handleCancel}
 					onEdit={() => setIsEditing(true)}
-					onNavigateToHistory={() => navigate('/walking-history')}
 				/>
 			</div>
 		</div>
