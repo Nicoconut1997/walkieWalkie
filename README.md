@@ -6,7 +6,7 @@ walkieWalkie is a modern web application that connects dog owners in their local
 
 App Link: https://walkie-walkie.vercel.app/
 
-Recording Demo: https://idexx-my.sharepoint.com/:v:/p/elijah-vivas/EcpkFF92sMhJs2jVSeIovxgBJrFHirAcn_ajXLgnebLkNA
+Recording Demo: https://idexx-my.sharepoint.com/:v:/p/elijah-vivas/EcpkFF92sMhJs2jVSeIovxgBs05dmzf98l0J0r6cKJEecw?e=jP0JuY
 
 *Created by team Butter*
 
