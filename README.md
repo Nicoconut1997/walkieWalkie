@@ -5,7 +5,8 @@
 walkieWalkie is a modern web application that connects dog owners in their local area for group walking events. Pet owners can discover, join, and create dog walking adventures to give their furry companions the exercise and socialization they deserve.
 
 App Link: https://walkie-walkie.vercel.app/
-Recording Demo:
+
+Recording Demo: https://idexx-my.sharepoint.com/:v:/p/elijah-vivas/EcpkFF92sMhJs2jVSeIovxgBJrFHirAcn_ajXLgnebLkNA
 
 *Created by team Butter*
 
